@@ -1,0 +1,78 @@
+# Builds an installable Android APK of the Mountain Planet app on GitHub's servers.
+# Runs on every push to main that touches the app, or by hand: Actions → "Android APK" → Run workflow.
+# Download: the newest release under "Releases" (MountainPlanet.apk), or the run's "Artifacts".
+name: Android APK
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'mobile/**'
+      - '.github/workflows/android-apk.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write   # to publish the APK as a GitHub Release
+
+concurrency:
+  group: android-apk
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        working-directory: mobile
+    env:
+      # Public app settings (the same values ship inside every copy of the app — not secrets).
+      EXPO_PUBLIC_SUPABASE_URL: https://gcdjwwofcgplaixarivx.supabase.co
+      EXPO_PUBLIC_SUPABASE_ANON_KEY: sb_publishable_74ys7h88Ghi6vzmwlXPupw_T-X_mOwk
+      NODE_ENV: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: zulu
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Install packages
+        run: npm ci
+
+      - name: Generate the Android project
+        run: npx expo prebuild --platform android --clean --no-install
+
+      - name: Build release APK
+        working-directory: mobile/android
+        # Phones only (64- and 32-bit ARM) — skips emulator CPU types to build faster.
+        run: ./gradlew assembleRelease --no-daemon -PreactNativeArchitectures=arm64-v8a,armeabi-v7a
+
+      - name: Name the APK
+        run: cp android/app/build/outputs/apk/release/app-release.apk MountainPlanet.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MountainPlanet-apk
+          path: mobile/MountainPlanet.apk
+
+      - name: Publish as a release (permanent download link)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-${{ github.run_number }}
+          name: Mountain Planet — test build ${{ github.run_number }}
+          body: |
+            Android test build from commit ${{ github.sha }}.
+            Download **MountainPlanet.apk** below on an Android phone, open it and allow installing from this source.
+            Connected to the live Supabase project.
+          files: mobile/MountainPlanet.apk
+          prerelease: true
