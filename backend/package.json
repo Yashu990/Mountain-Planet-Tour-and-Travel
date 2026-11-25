@@ -1,0 +1,20 @@
+{
+  "name": "mountain-planet-backend",
+  "private": true,
+  "type": "module",
+  "description": "Supabase backend for the Mountain Planet app: database, storage, auth and Edge Functions.",
+  "scripts": {
+    "seed:generate": "node scripts/generate-seed.ts",
+    "login": "npx supabase@3 login",
+    "link": "npx supabase@3 link",
+    "db:push": "npx supabase@3 db push --include-seed",
+    "db:start": "npx supabase@3 start",
+    "db:reset": "npx supabase@3 db reset",
+    "functions:serve": "npx supabase@3 functions serve",
+    "functions:deploy": "npx supabase@3 functions deploy submit-enquiry create-booking delete-account admin-update-booking create-payment payment-return planet-ai",
+    "secrets:set": "npx supabase@3 secrets set --env-file ./supabase/functions/.env"
+  },
+  "engines": {
+    "node": ">=22.18"
+  }
+}

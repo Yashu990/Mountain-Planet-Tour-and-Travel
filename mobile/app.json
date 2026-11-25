@@ -1,0 +1,104 @@
+{
+  "expo": {
+    "name": "Mountain Planet",
+    "slug": "mountain-planet",
+    "scheme": "mountainplanet",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/brand/icon.png",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.mountainplanetnepal.app",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "Choose photos from your trip to share in Traveller Stories."
+      },
+      "associatedDomains": [
+        "applinks:mountainplanetnepal.com"
+      ]
+    },
+    "android": {
+      "package": "com.mountainplanetnepal.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#0B1524",
+        "foregroundImage": "./assets/brand/adaptive-icon.png"
+      },
+      "predictiveBackGestureEnabled": false,
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "https",
+              "host": "mountainplanetnepal.com",
+              "pathPrefix": "/tour/"
+            },
+            {
+              "scheme": "https",
+              "host": "mountainplanetnepal.com",
+              "pathPrefix": "/guide/"
+            },
+            {
+              "scheme": "https",
+              "host": "mountainplanetnepal.com",
+              "pathPrefix": "/destinations/"
+            },
+            {
+              "scheme": "https",
+              "host": "mountainplanetnepal.com",
+              "pathPrefix": "/stays/"
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        }
+      ]
+    },
+    "web": {
+      "favicon": "./assets/brand/icon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      "expo-image",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/brand/logo-mark.png",
+          "imageWidth": 220,
+          "resizeMode": "contain",
+          "backgroundColor": "#070D18"
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Choose photos from your trip to share in Traveller Stories."
+        }
+      ],
+      "@react-native-community/datetimepicker",
+      [
+        "expo-notifications",
+        {
+          "color": "#D95A40"
+        }
+      ],
+      "expo-web-browser",
+      "expo-localization",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Mountain Planet uses your location once to show prices in your local currency. Your location is not stored or tracked.",
+          "isAndroidBackgroundLocationEnabled": false,
+          "isAndroidForegroundServiceEnabled": false
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": false
+    }
+  }
+}

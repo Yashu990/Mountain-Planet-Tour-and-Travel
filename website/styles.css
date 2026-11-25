@@ -1,0 +1,45 @@
+/* Mountain Planet website — same "Warm Heirloom Editorial" tokens as the app (degine.md). */
+:root {
+  --primary: #D95A40; --secondary: #5A6B41; --surface: #FDFCF8; --surface-alt: #F4EFE6;
+  --ink: #2D2B26; --muted: #8F8D84; --border: #EAE5DB;
+  --serif: "Fraunces", Georgia, serif; --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--surface); color: var(--ink); font: 400 17px/1.6 var(--sans); }
+a { color: var(--primary); text-decoration: none; }
+img { max-width: 100%; display: block; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left)); padding-right: max(20px, env(safe-area-inset-right)); }
+.narrow { max-width: 760px; padding-block: 40px 64px; }
+.top { position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px max(20px, env(safe-area-inset-left)); background: rgba(253,252,248,.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+.brand { display: flex; align-items: center; gap: 10px; color: var(--ink); font: 500 19px var(--serif); }
+h1, h2, h3, .serif { font-family: var(--serif); font-weight: 500; letter-spacing: -.015em; text-wrap: balance; }
+h1 { font-size: clamp(36px, 6vw, 60px); line-height: 1.05; margin: 8px 0 12px; color: #fff; }
+h1.dark { color: var(--ink); }
+h2 { font-size: clamp(24px, 3vw, 32px); line-height: 1.15; margin: 40px 0 16px; }
+h3 { font-size: 20px; line-height: 1.2; margin: 6px 0; }
+.kicker { font: 700 11px/1.4 var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--primary); }
+.kicker.light { color: rgba(255,255,255,.85); }
+.muted { color: var(--muted); font-size: 15px; }
+.lead { font-size: 19px; color: rgba(255,255,255,.9); max-width: 60ch; }
+.lead.dark { color: var(--ink); font-family: var(--serif); font-size: 22px; line-height: 1.45; }
+.hero { background: center/cover no-repeat var(--ink); padding: 96px 0 64px; }
+.hero.tall { padding: 160px 0 48px; }
+.btn { display: inline-block; background: var(--primary); color: #fff; font: 500 17px var(--serif); padding: 14px 22px; border-radius: 16px; box-shadow: 0 12px 30px rgba(217,90,64,.25); }
+.btn.soft { background: rgba(217,90,64,.1); color: var(--primary); box-shadow: none; font: 700 13px var(--sans); padding: 10px 16px; border-radius: 999px; }
+.row, .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+.card { display: block; background: var(--surface-alt); border-radius: 24px; overflow: hidden; color: var(--ink); }
+.card img { aspect-ratio: 4/3; object-fit: cover; width: 100%; }
+.card > div { padding: 16px 18px 20px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { background: var(--surface-alt); color: var(--ink); border-radius: 999px; padding: 9px 16px; font: 500 14px var(--sans); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 16px; padding-bottom: 20px; border-bottom: 2px solid var(--border); margin-bottom: 24px; }
+.stats b { display: block; font: 500 20px var(--serif); margin-top: 4px; }
+.steps { list-style: none; padding: 0; counter-reset: s; }
+.steps li { position: relative; padding: 0 0 18px 70px; counter-increment: s; min-height: 52px; }
+.steps li::before { content: counter(s, decimal-leading-zero); position: absolute; left: 0; top: -6px; font: 500 44px/1 var(--serif); color: rgba(90,107,65,.3); }
+.steps .kicker { display: block; color: var(--muted); }
+.num { color: rgba(90,107,65,.35); margin-right: 6px; }
+section.wrap { padding-block: 24px; }
+footer { margin-top: 48px; padding: 32px 0 48px; border-top: 1px solid var(--border); color: var(--muted); font-size: 15px; }
+footer .serif { color: var(--ink); font-size: 18px; }
