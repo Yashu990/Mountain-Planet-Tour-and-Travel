@@ -21,7 +21,8 @@
       "package": "com.mountainplanetnepal.app",
       "adaptiveIcon": {
         "backgroundColor": "#0B1524",
-        "foregroundImage": "./assets/brand/adaptive-icon.png"
+        "foregroundImage": "./assets/brand/adaptive-icon.png",
+        "backgroundImage": "./assets/brand/adaptive-background.png"
       },
       "predictiveBackGestureEnabled": false,
       "intentFilters": [
