@@ -54,8 +54,8 @@ jobs:
 
       - name: Build release APK
         working-directory: mobile/android
-        # Phones only (64- and 32-bit ARM) — skips emulator CPU types to build faster.
-        run: ./gradlew assembleRelease --no-daemon -PreactNativeArchitectures=arm64-v8a,armeabi-v7a
+        # Phones (64- and 32-bit ARM) + x86_64 so the same APK can be tested on the Android emulator.
+        run: ./gradlew assembleRelease --no-daemon -PreactNativeArchitectures=arm64-v8a,armeabi-v7a,x86_64
 
       - name: Name the APK
         run: cp android/app/build/outputs/apk/release/app-release.apk MountainPlanet.apk
