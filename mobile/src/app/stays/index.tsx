@@ -15,8 +15,7 @@ import { BadgePill, Card, CardGrid, Gutter, Kicker, PrimaryButton, Screen, SoftB
 import { SelectField, Stepper } from '@/components/form';
 import { DateField, isoDay } from '@/components/DateField';
 import { FilterBar, FilterSheet, QuickChip, SortSheet, countActive, type FilterGroup, type FilterValues } from '@/components/filters';
-import { BackHeader } from '@/components/BackHeader';
-import { BedIcon, CalendarBlankIcon, CheckIcon, MagnifyingGlassIcon, StarIcon, UsersIcon, XIcon } from '@/components/icons';
+import { ArrowLeftIcon, BedIcon, CheckIcon, MagnifyingGlassIcon, StarIcon, XIcon } from '@/components/icons';
 
 const SORTS = [
   { value: 'best', label: 'Best match' },
@@ -194,10 +193,19 @@ function SearchSheet({ visible, onClose, value, onApply, cities }: { visible: bo
 export default function Stays() {
   const { version } = useContent();
   const { t } = useI18n();
-  const params = useLocalSearchParams<{ kind?: StayKind; where?: string }>();
-  const [search, setSearch] = useState<StaySearch>({ where: params.where ?? '', checkIn: null, checkOut: null, adults: 2, children: 0, rooms: 1 });
+  const params = useLocalSearchParams<{ kind?: StayKind; where?: string; ci?: string; co?: string; a?: string; c?: string; r?: string }>();
+  const day = (v?: string) => (v && /^\d{4}-\d{2}-\d{2}$/.test(v) ? new Date(v + 'T00:00:00') : null);
+  const [search, setSearch] = useState<StaySearch>({ where: params.where ?? '', checkIn: day(params.ci), checkOut: day(params.co), adults: Math.max(1, Number(params.a) || 2), children: Math.max(0, Number(params.c) || 0), rooms: Math.max(1, Number(params.r) || 1) });
   const [filters, setFilters] = useState<FilterValues>(params.kind ? { type: [params.kind] } : {});
   const [sort, setSort] = useState('best');
+  // A new search from the Hotels page can reuse this screen: follow its parameters.
+  const key = [params.where, params.kind, params.ci, params.co, params.a, params.c, params.r].join('|');
+  const [seen, setSeen] = useState(key);
+  if (seen !== key) {
+    setSeen(key);
+    setSearch({ where: params.where ?? '', checkIn: day(params.ci), checkOut: day(params.co), adults: Math.max(1, Number(params.a) || 2), children: Math.max(0, Number(params.c) || 0), rooms: Math.max(1, Number(params.r) || 1) });
+    setFilters(params.kind ? { type: [params.kind] } : {});
+  }
   const [sheet, setSheet] = useState<null | 'search' | 'filters' | 'sort'>(null);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps -- content arrays are updated in place; `version` signals the change
@@ -229,26 +237,21 @@ export default function Stays() {
   const anySample = results.some((s) => s.isSample);
 
   return (
-    <Screen>
-      <BackHeader />
-      <Gutter style={{ marginTop: space.sm }}>
-        <Kicker>Hotels & homestays</Kicker>
-        <Text style={[type.displayMd, { marginTop: 6 }]}>{t('stays.title')}</Text>
-        {/* search summary (tap to edit) */}
-        <Pressable onPress={() => setSheet('search')} style={styles.summary} accessibilityRole="search" accessibilityLabel="Edit search">
-          <MagnifyingGlassIcon size={20} color={colors.onSurfaceVariant} />
-          <View style={{ flex: 1 }}>
-            <Text style={[type.labelMd, { fontFamily: fonts.sansSemi }]} numberOfLines={1}>{search.where || t('stays.anywhere')}</Text>
-            <View style={{ flexDirection: 'row', gap: 10, marginTop: 2 }}>
-              <Text style={[type.bodySm, { color: colors.onSurfaceVariant, fontSize: 12 }]}><CalendarBlankIcon size={12} color={colors.onSurfaceVariant} /> {when}</Text>
-              <Text style={[type.bodySm, { color: colors.onSurfaceVariant, fontSize: 12 }]}><UsersIcon size={12} color={colors.onSurfaceVariant} /> {search.rooms} {search.rooms === 1 ? 'room' : 'rooms'} · {guests} {guests === 1 ? 'guest' : 'guests'}</Text>
+    <Screen pinBelowStatusBar stickyHeaderIndices={[0]} style={{ backgroundColor: colors.surfaceAlt }} contentStyle={{ paddingTop: 0 }}>
+      {/* pinned: search summary + Maps · Sort · Filters bar */}
+      <View style={styles.pinned}>
+        <View style={styles.topRow}>
+          <Pressable onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))} hitSlop={10} style={styles.backBtn} accessibilityRole="button" accessibilityLabel="Back">
+            <ArrowLeftIcon size={22} color={colors.onSurface} weight="bold" />
+          </Pressable>
+          <Pressable onPress={() => setSheet('search')} style={styles.summary} accessibilityRole="search" accessibilityLabel="Edit search">
+            <View style={{ flex: 1 }}>
+              <Text style={styles.sumWhere} numberOfLines={1}>{search.where || t('stays.anywhere')}</Text>
+              <Text style={styles.sumMeta} numberOfLines={1}>{when}, {search.rooms} {search.rooms === 1 ? 'room' : 'rooms'}, {guests} {guests === 1 ? 'guest' : 'guests'}</Text>
             </View>
-          </View>
-          <Text style={[type.labelMd, { color: colors.primary, fontFamily: fonts.sansSemi }]}>Edit</Text>
-        </Pressable>
-      </Gutter>
-
-      <View style={{ marginTop: space.md }}>
+            <MagnifyingGlassIcon size={20} color={colors.primary} weight="bold" />
+          </Pressable>
+        </View>
         <FilterBar active={countActive(filters)} onOpenFilters={() => setSheet('filters')} sortLabel={SORTS.find((s) => s.value === sort)!.label} onOpenSort={() => setSheet('sort')}>
           <QuickChip label="Map view" on={false} onPress={() => router.push({ pathname: '/map', params: { layer: 'stays' } })} />
           <QuickChip label="Homestays" on={on('type', 'homestay')} onPress={() => toggleQuick('type', 'homestay')} />
@@ -256,6 +259,10 @@ export default function Stays() {
           <QuickChip label="Free cancellation" on={on('deals', 'free')} onPress={() => toggleQuick('deals', 'free')} />
         </FilterBar>
       </View>
+
+      <Gutter style={{ marginTop: space.md }}>
+        <Text style={styles.heading}>{t('stays.title')}</Text>
+      </Gutter>
 
       <Gutter style={{ marginTop: space.md }}>
         <Text style={[type.bodySm, { color: colors.onSurfaceVariant }]}>
@@ -313,8 +320,14 @@ export default function Stays() {
 }
 
 const styles = StyleSheet.create({
-  summary: { marginTop: space.md, flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: colors.surfaceAlt, borderRadius: radius.lg, paddingHorizontal: 16, paddingVertical: 12, ...squircle },
-  card: { borderRadius: radius.xl, overflow: 'hidden', backgroundColor: colors.surfaceAlt, ...squircle, ...shadow.hairline },
+  pinned: { backgroundColor: '#FFFFFF', paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: colors.border, boxShadow: '0 4px 12px rgba(45,43,38,0.06)' },
+  topRow: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 8, paddingTop: 6, paddingBottom: 10 },
+  backBtn: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
+  summary: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10, backgroundColor: '#FBF9F5', borderWidth: 1, borderColor: colors.border, borderRadius: radius.md, paddingHorizontal: 14, paddingVertical: 8, marginRight: 8 },
+  sumWhere: { fontFamily: fonts.sansBold, fontSize: 16, color: colors.onSurface },
+  sumMeta: { fontFamily: fonts.sans, fontSize: 12.5, color: colors.onSurfaceVariant, marginTop: 1 },
+  heading: { fontFamily: fonts.serif, fontSize: 22, color: colors.onSurface },
+  card: { borderRadius: radius.xl, overflow: 'hidden', backgroundColor: '#FFFFFF', ...squircle, ...shadow.hairline },
   count: { position: 'absolute', right: 12, bottom: 12, backgroundColor: 'rgba(0,0,0,0.45)', borderRadius: radius.full, paddingHorizontal: 10, paddingVertical: 3 },
   score: { backgroundColor: colors.secondary, borderRadius: radius.sm, paddingHorizontal: 6, paddingVertical: 2 },
   sheet: { width: '100%', maxWidth: MAX_CONTENT_WIDTH, alignSelf: 'center', backgroundColor: colors.surface, borderTopLeftRadius: radius.xxl, borderTopRightRadius: radius.xxl, borderCurve: 'continuous', paddingTop: 10, maxHeight: '92%', ...shadow.sheet },

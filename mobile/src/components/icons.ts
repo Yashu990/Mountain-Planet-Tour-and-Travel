@@ -77,3 +77,7 @@ export { TreeIcon } from 'phosphor-react-native/src/icons/Tree';
 export { BellIcon } from 'phosphor-react-native/src/icons/Bell';
 export { ChatCircleDotsIcon } from 'phosphor-react-native/src/icons/ChatCircleDots';
 export { FileTextIcon } from 'phosphor-react-native/src/icons/FileText';
+export { ArrowsDownUpIcon } from 'phosphor-react-native/src/icons/ArrowsDownUp';
+export { CloudSunIcon } from 'phosphor-react-native/src/icons/CloudSun';
+export { PencilSimpleIcon } from 'phosphor-react-native/src/icons/PencilSimple';
+export { CrosshairIcon } from 'phosphor-react-native/src/icons/Crosshair';

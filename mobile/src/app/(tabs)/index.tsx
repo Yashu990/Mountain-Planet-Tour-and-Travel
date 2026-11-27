@@ -53,13 +53,13 @@ const G = 16;
 
 type Service = { icon: Icon; label: string; go: () => void };
 const primary: (Service & { tint: string; color: string })[] = [
-  { icon: BedIcon, label: 'Hotels', go: () => router.push({ pathname: '/stays', params: { kind: 'hotel' } }), tint: 'rgba(217,90,64,0.12)', color: colors.primary },
-  { icon: MountainsIcon, label: 'Treks &\nTours', go: () => router.navigate('/explore'), tint: 'rgba(90,107,65,0.14)', color: colors.secondary },
+  { icon: BedIcon, label: 'Hotels', go: () => router.push({ pathname: '/hotels', params: { kind: 'hotel' } }), tint: 'rgba(217,90,64,0.12)', color: colors.primary },
+  { icon: MountainsIcon, label: 'Treks &\nTours', go: () => router.push('/treks'), tint: 'rgba(90,107,65,0.14)', color: colors.secondary },
   { icon: AirplaneTiltIcon, label: 'Flights', go: () => router.push('/book/flight'), tint: 'rgba(62,107,154,0.13)', color: '#3E6B9A' },
   { icon: TaxiIcon, label: 'Cabs', go: () => router.push('/book/cab'), tint: 'rgba(169,116,28,0.15)', color: '#A9741C' },
 ];
 const secondary: Service[] = [
-  { icon: HouseLineIcon, label: 'Homestays\n& Villages', go: () => router.push({ pathname: '/stays', params: { kind: 'homestay' } }) },
+  { icon: HouseLineIcon, label: 'Homestays\n& Villages', go: () => router.push({ pathname: '/hotels', params: { kind: 'homestay' } }) },
   { icon: TicketIcon, label: 'Activities\n& Tickets', go: () => router.push('/book/ticket') },
   { icon: CarIcon, label: 'Airport\nPickup', go: () => router.push('/book/cab') },
   { icon: SunIcon, label: 'Trek Tools\n& Weather', go: () => router.push('/tools') },

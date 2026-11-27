@@ -62,7 +62,7 @@ function sortTours(list: Tour[], by: string) {
 export default function Explore() {
   const { version } = useContent();
   const { t } = useI18n();
-  const params = useLocalSearchParams<{ q?: string; cat?: string; board?: string; focus?: string; sort?: string }>();
+  const params = useLocalSearchParams<{ q?: string; cat?: string; board?: string; focus?: string; sort?: string; days?: string; level?: string }>();
   const [q, setQ] = useState(params.q ?? '');
   const [cat, setCat] = useState<CatName>((params.cat as CatName) ?? 'All');
   const [board, setBoard] = useState<string | null>(params.board ?? null);
@@ -78,9 +78,10 @@ export default function Explore() {
     if (params.cat) setCat(params.cat as CatName);
     if (params.board) setBoard(params.board);
     if (params.sort && SORTS.some((x) => x.value === params.sort)) setSort(params.sort);
+    if (params.days || params.level) setFilters({ ...(params.days ? { days: [params.days] } : {}), ...(params.level ? { level: [params.level] } : {}) });
     if (params.q !== undefined) setQ(params.q);
     if (params.focus) setTimeout(() => input.current?.focus(), 350);
-  }, [params.cat, params.board, params.q, params.focus, params.sort]);
+  }, [params.cat, params.board, params.q, params.focus, params.sort, params.days, params.level]);
 
   const boardObj = boards.find((b) => b.id === board);
   const boardMatch = useMemo(() => (boardObj ? boardObj.match : () => true), [boardObj]);
