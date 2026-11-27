@@ -4,13 +4,15 @@ import { colors, space, type } from '@/theme';
 import { getGuide, guides, tours } from '@/data/tours';
 import { askAgent, shareLink } from '@/lib/store';
 import { DetailLayout } from '@/components/DetailLayout';
-import { Card, ChipRow, Gutter, Hairline, Kicker, Meta, PrimaryButton, Section, SectionHeader, SoftButton, StepNumeral } from '@/components/ui';
+import { Card, Gutter, Hairline, Kicker, Meta, PrimaryButton, Section, SectionHeader, SoftButton, StepNumeral, Carousel, useCardWidth, useHalfCardWidth } from '@/components/ui';
 import { GuideCard, TourTile } from '@/components/cards';
 import { ClockIcon, ShareNetworkIcon, SparkleIcon } from '@/components/icons';
 import NotFound from '@/components/NotFound';
 import { useContent } from '@/lib/content';
 
 export default function GuideDetail() {
+  const cardW = useCardWidth(0.88);
+  const halfW = useHalfCardWidth();
   useContent();
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const g = getGuide(slug ?? '');
@@ -53,12 +55,12 @@ export default function GuideDetail() {
 
       <Section>
         <SectionHeader kicker="Keep reading" title="More guides" />
-        <ChipRow>{guides.filter((x) => x.slug !== g.slug).map((x) => <GuideCard key={x.slug} g={x} width={260} />)}</ChipRow>
+        <Carousel itemWidth={cardW}>{guides.filter((x) => x.slug !== g.slug).map((x) => <GuideCard key={x.slug} g={x} width={cardW} />)}</Carousel>
       </Section>
 
       <Section>
         <SectionHeader kicker="Popular journeys" title="Keep exploring" />
-        <ChipRow>{tours.slice(0, 6).map((t) => <TourTile key={t.slug} tour={t} width={160} />)}</ChipRow>
+        <Carousel itemWidth={halfW}>{tours.slice(0, 6).map((t) => <TourTile key={t.slug} tour={t} width={halfW} />)}</Carousel>
       </Section>
     </DetailLayout>
   );

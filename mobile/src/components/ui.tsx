@@ -193,6 +193,34 @@ export function ChipRow({ children, style }: { children: ReactNode; style?: Styl
   );
 }
 
+/** Card width for side-scrolling rows: a share of the screen, so the next card clearly peeks in. */
+export function useCardWidth(share = 0.82) {
+  const w = useLayoutWidth();
+  return Math.round((w - space.gutter * 2) * share);
+}
+/** Two cards side by side, both fully visible. */
+export function useHalfCardWidth() {
+  const w = useLayoutWidth();
+  return Math.floor((w - space.gutter * 2 - space.md) / 2);
+}
+
+/** Horizontal card row that snaps card by card, sized to the screen (no half-cut cards on any phone). */
+export function Carousel({ children, itemWidth, style }: { children: ReactNode; itemWidth: number; style?: StyleProp<ViewStyle> }) {
+  return (
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      snapToInterval={itemWidth + space.md}
+      snapToAlignment="start"
+      decelerationRate="fast"
+      contentContainerStyle={{ paddingHorizontal: space.gutter, gap: space.md }}
+      style={[{ flexGrow: 0 }, style]}
+    >
+      {children}
+    </ScrollView>
+  );
+}
+
 export const TagChip = ({ label }: { label: string }) => (
   <View style={styles.tag}>
     <Text style={type.labelMd}>{label}</Text>

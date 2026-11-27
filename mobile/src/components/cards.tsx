@@ -94,7 +94,7 @@ export function DestinationCard({ d, width = 220, height = 280 }: { d: Destinati
       <Image source={img(d.img)} style={StyleSheet.absoluteFill} contentFit="cover" transition={200} accessibilityLabel={d.name} />
       <LinearGradient colors={['transparent', 'rgba(0,0,0,0.75)']} locations={[0.45, 1]} style={StyleSheet.absoluteFill} />
       <View style={{ position: 'absolute', left: 18, right: 18, bottom: 18 }}>
-        <Text style={[type.labelUpper, { color: 'rgba(255,255,255,0.8)' }]}>{d.area} · {d.alt}</Text>
+        <Text numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.75} style={[type.labelUpper, { color: 'rgba(255,255,255,0.8)' }]}>{d.area} · {d.alt}</Text>
         <Text style={[type.headlineMd, { color: '#fff', marginTop: 4 }]}>{d.name}</Text>
       </View>
     </Tap>

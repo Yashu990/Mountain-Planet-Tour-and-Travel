@@ -7,13 +7,14 @@ import { colors, fonts, space, type } from '@/theme';
 import { getTour, tours } from '@/data/tours';
 import { askAgent, shareLink, useStore } from '@/lib/store';
 import { DetailLayout } from '@/components/DetailLayout';
-import { Card, ChipRow, Gutter, Hairline, Kicker, Meta, PrimaryButton, Section, SectionHeader, SoftButton, StepNumeral, TagChip } from '@/components/ui';
+import { Card, Gutter, Hairline, Kicker, Meta, PrimaryButton, Section, SectionHeader, SoftButton, StepNumeral, TagChip, Carousel, useHalfCardWidth } from '@/components/ui';
 import { TourTile } from '@/components/cards';
 import { BookmarkSimpleIcon, CheckIcon, ShareNetworkIcon, SparkleIcon, StarIcon, MapPinIcon, SunIcon } from '@/components/icons';
 import NotFound from '@/components/NotFound';
 import { useContent } from '@/lib/content';
 
 export default function TourDetail() {
+  const halfW = useHalfCardWidth();
   useContent();
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const tour = getTour(slug ?? '');
@@ -126,9 +127,9 @@ export default function TourDetail() {
 
       <Section>
         <SectionHeader kicker="You may also like" title="More like this" />
-        <ChipRow>
-          {similar.map((t) => <TourTile key={t.slug} tour={t} width={160} />)}
-        </ChipRow>
+        <Carousel itemWidth={halfW}>
+          {similar.map((t) => <TourTile key={t.slug} tour={t} width={halfW} />)}
+        </Carousel>
       </Section>
     </DetailLayout>
   );

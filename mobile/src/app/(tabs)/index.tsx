@@ -32,6 +32,9 @@ import {
   StepNumeral,
   Tap,
   TextButton,
+  Carousel,
+  useCardWidth,
+  useHalfCardWidth,
 } from '@/components/ui';
 import { BoardCard, DestinationCard, GuideCard, HeroTourCard, StayCard, StoryCard, TourRow } from '@/components/cards';
 import {
@@ -111,6 +114,8 @@ export default function Home() {
   // eslint-disable-next-line react-hooks/exhaustive-deps -- content arrays are updated in place; `version` signals the change
   const feed = useMemo(() => tours.filter((t) => t.slug !== featured.slug && (cat === 'All' || cat === 'Guides' || t.category === cat)), [cat, featured.slug, version]);
   const storyW = Math.min(200, width * 0.48);
+  const cardW = useCardWidth(0.88);
+  const halfW = useHalfCardWidth();
 
   return (
     <Screen tabs>
@@ -169,9 +174,9 @@ export default function Home() {
       {/* trek deals */}
       <Section>
         <SectionHeader kicker={t('home.dealsKicker')} title={t('home.deals')} action={t('common.seeAll')} onAction={() => router.push({ pathname: '/explore', params: { sort: 'price' } })} />
-        <ChipRow>
+        <Carousel itemWidth={cardW}>
           {deals.map((t) => (
-            <Tap key={t.slug} onPress={() => router.push(`/tour/${t.slug}`)} style={styles.deal} accessibilityRole="button" accessibilityLabel={`${t.title}, from $${t.price}`}>
+            <Tap key={t.slug} onPress={() => router.push(`/tour/${t.slug}`)} style={[styles.deal, { width: cardW }]} accessibilityRole="button" accessibilityLabel={`${t.title}, from $${t.price}`}>
               <Image source={img(t.img)} style={{ height: 150, width: '100%' }} contentFit="cover" />
               <View style={{ padding: 16, flexDirection: 'row', gap: 10 }}>
                 <View style={{ flex: 1 }}>
@@ -185,7 +190,7 @@ export default function Home() {
               </View>
             </Tap>
           ))}
-        </ChipRow>
+        </Carousel>
       </Section>
 
       {/* trek tools */}
@@ -249,9 +254,9 @@ export default function Home() {
           {categories.map((c) => <Chip key={c.name} label={c.name} icon={c.icon} active={cat === c.name} onPress={() => setCat(c.name)} />)}
         </ChipRow>
         {cat === 'Guides' ? (
-          <ChipRow style={{ marginTop: space.lg }}>
-            {guides.map((g) => <GuideCard key={g.slug} g={g} width={260} />)}
-          </ChipRow>
+          <Carousel itemWidth={cardW} style={{ marginTop: space.lg }}>
+            {guides.map((g) => <GuideCard key={g.slug} g={g} width={cardW} />)}
+          </Carousel>
         ) : (
           <Gutter style={{ marginTop: space.lg, gap: space.xl }}>
             {feed.slice(0, 5).map((t) => <TourRow key={t.slug} tour={t} />)}
@@ -263,22 +268,22 @@ export default function Home() {
       {/* destinations */}
       <Section>
         <SectionHeader kicker="Destinations" title="Where we take you" action="See all" onAction={() => router.push('/destinations')} />
-        <ChipRow>
-          {destinations.slice(0, 8).map((d) => <DestinationCard key={d.name} d={d} />)}
-        </ChipRow>
+        <Carousel itemWidth={halfW}>
+          {destinations.slice(0, 8).map((d) => <DestinationCard key={d.name} d={d} width={halfW} height={Math.round(halfW * 1.3)} />)}
+        </Carousel>
       </Section>
 
       {/* boards */}
       <Section>
         <SectionHeader kicker="Curated boards" title="Collections by our guides" />
-        <ChipRow>
+        <Carousel itemWidth={cardW}>
           {boards.map((b) => {
             const items = tours.filter(b.match);
             const imgs = items.slice(0, 3).map((t) => t.img);
             while (imgs.length < 3) imgs.push(items[0]?.img ?? '/img/hero.jpg');
-            return <BoardCard key={b.id} title={b.title} count={items.length} imgs={imgs} onPress={() => router.push({ pathname: '/explore', params: { board: b.id } })} />;
+            return <BoardCard key={b.id} title={b.title} count={items.length} imgs={imgs} width={cardW} onPress={() => router.push({ pathname: '/explore', params: { board: b.id } })} />;
           })}
-        </ChipRow>
+        </Carousel>
       </Section>
 
       {/* journey steps */}

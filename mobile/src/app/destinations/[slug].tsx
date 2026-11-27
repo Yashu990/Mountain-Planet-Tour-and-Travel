@@ -6,13 +6,14 @@ import { stories } from '@/data/placeStories';
 import { tours } from '@/data/tours';
 import { shareLink } from '@/lib/store';
 import { DetailLayout } from '@/components/DetailLayout';
-import { Card, ChipRow, Gutter, Hairline, Kicker, PrimaryButton, Section, SectionHeader } from '@/components/ui';
+import { Card, Gutter, Hairline, Kicker, PrimaryButton, Section, SectionHeader, Carousel, useHalfCardWidth } from '@/components/ui';
 import { DestinationCard, TourRow } from '@/components/cards';
 import { CheckIcon, ShareNetworkIcon } from '@/components/icons';
 import NotFound from '@/components/NotFound';
 import { useContent } from '@/lib/content';
 
 export default function Place() {
+  const halfW = useHalfCardWidth();
   useContent();
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const d = destinations.find((x) => toSlug(x.name) === slug);
@@ -78,7 +79,7 @@ export default function Place() {
       {more.length > 0 && (
         <Section>
           <SectionHeader kicker={d.area} title="More like this" />
-          <ChipRow>{more.map((m) => <DestinationCard key={m.name} d={m} width={180} height={230} />)}</ChipRow>
+          <Carousel itemWidth={halfW}>{more.map((m) => <DestinationCard key={m.name} d={m} width={halfW} height={Math.round(halfW * 1.3)} />)}</Carousel>
         </Section>
       )}
     </DetailLayout>
