@@ -272,6 +272,14 @@ export default function PartnerListing() {
                     </Card>
                   </Pressable>
                 ))}
+                {rooms.length && (listing.status === 'live' || listing.status === 'paused') ? (
+                  <View style={{ gap: 6 }}>
+                    <Kicker>Prices & availability calendar</Kicker>
+                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+                      {rooms.map((r) => <Chip key={r.id} label={r.name} onPress={() => router.push({ pathname: '/partner/calendar', params: { room: r.id } })} />)}
+                    </View>
+                  </View>
+                ) : null}
                 {editable ? <SoftButton label="Add a room type" icon={PlusIcon} onPress={() => router.push({ pathname: '/partner/room', params: { stay: listing.slug } })} /> : null}
               </Gutter>
             </Section>

@@ -12,6 +12,7 @@ import { FormCard, Segmented, SelectField, Stepper } from '@/components/form';
 import { DateField, isoDay } from '@/components/DateField';
 import { BadgePill, Chip, ChipRow, Field, Gutter, Kicker } from '@/components/ui';
 import { MapPinIcon } from '@/components/icons';
+import { PartnerStayBooking } from '@/components/PartnerStayBooking';
 
 const HOTEL_CITIES = ['Kathmandu', 'Pokhara', 'Chitwan (Sauraha)', 'Nagarkot', 'Bhaktapur', 'Lumbini', 'Lukla', 'Namche Bazaar'];
 const HOMESTAY_AREAS = ['Ghandruk (Annapurna)', 'Bandipur', 'Sirubari', 'Tharu village, Chitwan', 'Tamang Heritage Trail (Langtang)', 'Bhaktapur old town', 'Panauti'];
@@ -23,6 +24,14 @@ const nights = (a: Date | null, b: Date | null) => (a && b ? Math.round((b.getTi
 export default function StayBooking() {
   useContent();
   const params = useLocalSearchParams<{ kind?: StayKind; stay?: string; room?: string; where?: string; ci?: string; co?: string; a?: string; c?: string }>();
+  const listing = params.stay ? getStay(params.stay) : undefined;
+  // Verified partner listings: live prices, availability and pay-in-app / at-property.
+  if (listing?.partnerId) return <PartnerStayBooking key={listing.slug} listing={listing} params={params} />;
+  return <RequestStayBooking params={params} />;
+}
+
+/** Request form for our own / sample stays: the team finds the property and sends a price. */
+function RequestStayBooking({ params }: { params: { kind?: StayKind; stay?: string; room?: string; where?: string; ci?: string; co?: string; a?: string; c?: string } }) {
   const day = (s?: string) => (s && /^\d{4}-\d{2}-\d{2}$/.test(s) ? new Date(s + 'T00:00:00') : null);
   const listing = params.stay ? getStay(params.stay) : undefined;
   const today = new Date();

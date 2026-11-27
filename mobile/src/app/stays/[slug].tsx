@@ -112,7 +112,7 @@ export default function StayDetail() {
           ) : null}
         </Gutter>
 
-        {rooms ? <RoomsSection rooms={rooms} onChoose={(r) => reserve(r.name)} /> : null}
+        {rooms ? <RoomsSection rooms={rooms} onChoose={(r) => reserve(r.id)} /> : null}
 
         {stay.checkInTime || stay.checkOutTime || stay.houseRules ? (
           <Section>

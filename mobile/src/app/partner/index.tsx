@@ -4,7 +4,8 @@
 import { ActivityIndicator, Pressable, Text, View } from 'react-native';
 import { Image } from 'expo-image';
 import { router, useFocusEffect } from 'expo-router';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
+import { fetchPartnerBookings, type PartnerBooking } from '@/lib/partnerBookings';
 import { colors, radius, space, type } from '@/theme';
 import { useAuth } from '@/lib/auth';
 import { LISTING_STATUS, useMyListing } from '@/lib/listings';
@@ -221,6 +222,15 @@ function Stat({ label, value }: { label: string; value: string }) {
 }
 
 function Dashboard({ partner }: { partner: Partner }) {
+  const [rows, setRows] = useState<PartnerBooking[] | null>(null);
+  useFocusEffect(
+    useCallback(() => {
+      fetchPartnerBookings().then(setRows).catch(() => setRows([]));
+    }, []),
+  );
+  const today = new Date().toISOString().slice(0, 10);
+  const pending = rows?.filter((b) => b.partner_status === 'pending' && b.status === 'requested').length;
+  const upcoming = rows?.filter((b) => b.partner_status === 'accepted' && b.status !== 'cancelled' && b.end_date >= today).length;
   return (
     <>
       <Section>
@@ -230,10 +240,25 @@ function Dashboard({ partner }: { partner: Partner }) {
             <Text style={[type.labelMd, { color: colors.secondary }]}>Verified partner · {KIND_LABEL[partner.kind]} · {partner.city}</Text>
           </View>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space.md }}>
-            <Stat label="New requests" value="0" />
-            <Stat label="Upcoming stays" value="0" />
+            <Stat label="New requests" value={pending == null ? '…' : String(pending)} />
+            <Stat label="Upcoming stays" value={upcoming == null ? '…' : String(upcoming)} />
             <Stat label="Commission" value={`${partner.commission_pct}%`} />
           </View>
+        </Gutter>
+      </Section>
+      <Section>
+        <Gutter>
+          <Pressable onPress={() => router.push('/partner/bookings')} accessibilityRole="button" accessibilityLabel="Bookings">
+            <Card style={{ flexDirection: 'row', alignItems: 'center', gap: 12, borderWidth: pending ? 2 : 0, borderColor: colors.primary }}>
+              <ReceiptIcon size={26} color={colors.secondary} weight="duotone" />
+              <View style={{ flex: 1 }}>
+                <Text style={type.headlineSm}>Bookings</Text>
+                <Text style={[type.bodySm, { color: pending ? colors.primary : colors.onSurfaceVariant }]}>
+                  {pending ? `${pending} waiting for your answer — reply within 2 hours` : 'Requests, upcoming guests and earnings'}
+                </Text>
+              </View>
+            </Card>
+          </Pressable>
         </Gutter>
       </Section>
       <ListingCard partner={partner} />

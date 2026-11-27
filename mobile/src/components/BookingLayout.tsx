@@ -42,7 +42,7 @@ export function BookingScreen({ image, kicker, title, children }: { image: strin
 }
 
 /** Name / email / phone, pre-filled from the signed-in account. */
-export function useContact() {
+export function useContact({ promo = true }: { promo?: boolean } = {}) {
   const { user } = useAuth();
   const [contact, setContact] = useState({ name: '', email: '', phone: '', promo: '' });
   useEffect(() => {
@@ -54,7 +54,7 @@ export function useContact() {
     <View style={{ gap: 16 }}>
       <Field label="Full name *" value={contact.name} onChangeText={(v) => setContact((c) => ({ ...c, name: v }))} autoComplete="name" textContentType="name" placeholder="Your name" />
       <Field label="Email *" value={contact.email} onChangeText={(v) => setContact((c) => ({ ...c, email: v }))} keyboardType="email-address" autoCapitalize="none" autoComplete="email" textContentType="emailAddress" placeholder="you@example.com" />
-      <Field label="Promo code (optional)" value={contact.promo} onChangeText={(v) => setContact((c) => ({ ...c, promo: v.toUpperCase() }))} autoCapitalize="characters" autoCorrect={false} placeholder="e.g. NAMASTE10" />
+      {promo ? <Field label="Promo code (optional)" value={contact.promo} onChangeText={(v) => setContact((c) => ({ ...c, promo: v.toUpperCase() }))} autoCapitalize="characters" autoCorrect={false} placeholder="e.g. NAMASTE10" /> : null}
       <Field label="Phone / WhatsApp" value={contact.phone} onChangeText={(v) => setContact((c) => ({ ...c, phone: v }))} keyboardType="phone-pad" autoComplete="tel" textContentType="telephoneNumber" placeholder="+977 98…" />
     </View>
   );

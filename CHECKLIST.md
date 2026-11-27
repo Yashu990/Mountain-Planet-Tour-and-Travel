@@ -46,7 +46,9 @@ Legend: ✅ done & tested · 🟢 done in code, switches on when you add the key
 - ✅ Partner can edit a live listing (changes show straight away) and **pause / resume** it; samples hide automatically once 3 partner listings are live
 - ✅ Security: one listing per partner, only approved partners, can’t publish themselves, fake ratings or touch other listings / sample stays (36 database tests)
 - ✅ Tested end to end on the emulator against the live project
-- ⬜ Phase 3: price & availability calendar, live prices in the app, bookings go to the partner (accept/decline in 2 hours), pay in app **or pay at property**
+- ✅ **Phase 3: bookings to partners** — per-room **calendar** (close/open days, special prices e.g. Dashain/Tihar, booked/total per night); travellers get a **live server-calculated price** and availability, choose **Pay at property** or **Pay in app**, and send a request; the partner gets it under **Bookings** with a 2-hour countdown, total / commission / “you receive”, and **Accept / Decline (with reason)**; guest email & phone shown only after accepting; pay-at-property → Confirmed, pay-in-app → Awaiting payment; no double booking (31 database tests)
+- ✅ Tested end to end on the emulator against the live project (book Standard twin 3 nights Rs 12,600 → partner accepts → confirmed → calendar shows booked → same night now “Fully booked”)
+- ⬜ Booking emails / push to partner and guest, and automatic expiry of unanswered requests — need the Edge Functions deployed (Supabase login)
 - ⬜ Phase 4: commission ledger both ways (we owe partner for app payments; partner owes 10% for pay-at-property), weekly payouts, monthly statements
 - ⬜ Emails to partners (application received / approved / needs changes) — after the Edge Functions are deployed
 - ⬜ Have a lawyer check the partner agreement text and confirm the document list per partner type

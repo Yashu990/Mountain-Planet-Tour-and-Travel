@@ -67,6 +67,13 @@ export interface Booking {
   quoteUsd?: number | null;
   teamNote?: string | null;
   createdAt: string;
+  /** Partner bookings: server-set total in rupees, how the guest pays, and the property's answer. */
+  totalNpr?: number | null;
+  payAtProperty?: boolean;
+  partnerStatus?: 'pending' | 'accepted' | 'declined' | null;
+  partnerDeadline?: string | null;
+  stayName?: string | null;
+  roomName?: string | null;
 }
 
 const LOCAL_KEY = 'mpn-bookings';
@@ -133,7 +140,7 @@ export async function submitBooking(b: BookingInput): Promise<SubmitResult> {
   return { mode: 'email' };
 }
 
-interface Row { id: string; reference: string; kind: BookingKind; status: BookingStatus; start_date: string; end_date: string | null; start_time: string | null; guests: number; quote_usd: number | null; team_note: string | null; created_at: string; location: string | null; destination: string | null; stay_slug: string | null }
+interface Row { id: string; reference: string; kind: BookingKind; status: BookingStatus; start_date: string; end_date: string | null; start_time: string | null; guests: number; quote_usd: number | null; team_note: string | null; created_at: string; location: string | null; destination: string | null; stay_slug: string | null; total_npr?: number | null; pay_at_property?: boolean; partner_status?: 'pending' | 'accepted' | 'declined' | null; partner_deadline?: string | null; details?: Record<string, unknown> | null }
 
 /** Bookings from the account (live status) merged with ones remembered on this phone. */
 export async function fetchMyBookings(): Promise<Booking[]> {
@@ -159,7 +166,7 @@ export async function fetchMyBookings(): Promise<Booking[]> {
       reference: r.reference,
       kind: r.kind,
       status: r.status,
-      title: l?.title ?? (where || KIND_LABEL[r.kind]),
+      title: l?.title ?? ((r.details?.stay as string) || where || KIND_LABEL[r.kind]),
       startDate: r.start_date,
       endDate: r.end_date,
       startTime: r.start_time,
@@ -167,6 +174,12 @@ export async function fetchMyBookings(): Promise<Booking[]> {
       quoteUsd: r.quote_usd,
       teamNote: r.team_note,
       createdAt: r.created_at,
+      totalNpr: r.total_npr ?? null,
+      payAtProperty: !!r.pay_at_property,
+      partnerStatus: r.partner_status ?? null,
+      partnerDeadline: r.partner_deadline ?? null,
+      stayName: (r.details?.stay as string) ?? null,
+      roomName: (r.details?.room as string) ?? null,
     };
   });
   AsyncStorage.setItem(CACHE_KEY, JSON.stringify(remote)).catch(() => {});

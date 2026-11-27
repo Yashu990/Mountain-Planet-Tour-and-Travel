@@ -5,11 +5,12 @@ import { router } from 'expo-router';
 import { colors, fonts, radius, space, type } from '@/theme';
 import { useAuth } from '@/lib/auth';
 import { useStore } from '@/lib/store';
+import { rupees, useCurrency } from '@/lib/currency';
 import { acceptBooking, cancelBooking, KIND_LABEL, notifyBookingsChanged, payBooking, STATUS_LABEL, useMyBookings, type Booking, type BookingKind, type BookingStatus } from '@/lib/bookings';
 import { fmtDate } from '@/components/DateField';
 import { Card, Gutter, Kicker, PrimaryButton, Screen, SoftButton, TextButton } from '@/components/ui';
 import { BackHeader } from '@/components/BackHeader';
-import { AirplaneTiltIcon, BedIcon, CarIcon, CheckCircleIcon, HouseLineIcon, ReceiptIcon, TicketIcon, UserCircleIcon, type Icon } from '@/components/icons';
+import { AirplaneTiltIcon, BedIcon, CarIcon, CheckCircleIcon, ClockIcon, HouseLineIcon, ReceiptIcon, TicketIcon, UserCircleIcon, type Icon } from '@/components/icons';
 
 const ICON: Record<BookingKind, Icon> = { hotel: BedIcon, homestay: HouseLineIcon, cab: CarIcon, flight: AirplaneTiltIcon, ticket: TicketIcon };
 
@@ -28,6 +29,7 @@ const day = (s?: string | null) => (s ? fmtDate(new Date(s + 'T00:00:00')) : '')
 
 function BookingCard({ b, signedIn, onChanged }: { b: Booking; signedIn: boolean; onChanged: () => void }) {
   const { toast } = useStore();
+  const { priceNpr, currency } = useCurrency();
   const [busy, setBusy] = useState(false);
   const I = ICON[b.kind];
   const pill = PILL[b.status];
@@ -76,10 +78,25 @@ function BookingCard({ b, signedIn, onChanged }: { b: Booking; signedIn: boolean
         {b.endDate ? ` → ${day(b.endDate)}` : ''}
         {b.startTime ? ` · ${b.startTime}` : ''} · {b.guests} {b.guests === 1 ? 'person' : 'people'}
       </Text>
-      {b.quoteUsd != null ? (
+      {b.roomName ? <Text style={[type.bodySm, { color: colors.onSurfaceVariant, marginTop: -6 }]}>{b.roomName}</Text> : null}
+      {b.totalNpr != null ? (
+        <View>
+          <Kicker>{b.payAtProperty ? 'Total · pay at the property' : 'Total · pay in the app'}</Kicker>
+          <Text style={[type.headlineLg, { marginTop: 2 }]}>
+            {rupees(b.totalNpr)}
+            {currency !== 'NPR' ? <Text style={[type.bodySm, { color: colors.onSurfaceVariant }]}>{`  about ${priceNpr(b.totalNpr)}`}</Text> : null}
+          </Text>
+        </View>
+      ) : b.quoteUsd != null ? (
         <View>
           <Kicker>Price from our team</Kicker>
           <Text style={[type.headlineLg, { marginTop: 2 }]}>${b.quoteUsd.toLocaleString('en-US')}</Text>
+        </View>
+      ) : null}
+      {b.partnerStatus === 'pending' && b.status === 'requested' ? (
+        <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
+          <ClockIcon size={18} color={colors.primary} />
+          <Text style={[type.bodySm, { color: colors.primary, fontFamily: fonts.sansMedium, flex: 1 }]}>Waiting for the property to confirm (usually within 2 hours)</Text>
         </View>
       ) : null}
       {b.teamNote ? <Text style={[type.bodySm, { fontFamily: fonts.sansMedium }]}>{b.teamNote}</Text> : null}
@@ -97,7 +114,7 @@ function BookingCard({ b, signedIn, onChanged }: { b: Booking; signedIn: boolean
       {b.status === 'paid' || b.status === 'confirmed' ? (
         <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
           <CheckCircleIcon size={18} color={colors.secondary} weight="fill" />
-          <Text style={[type.bodySm, { color: colors.secondary, fontFamily: fonts.sansMedium }]}>{b.status === 'paid' ? 'Paid — our team will confirm shortly' : 'All set. See you in Nepal!'}</Text>
+          <Text style={[type.bodySm, { color: colors.secondary, fontFamily: fonts.sansMedium }]}>{b.status === 'paid' ? 'Paid — our team will confirm shortly' : b.payAtProperty ? 'Confirmed by the property. Pay when you arrive.' : 'All set. See you in Nepal!'}</Text>
         </View>
       ) : null}
 
