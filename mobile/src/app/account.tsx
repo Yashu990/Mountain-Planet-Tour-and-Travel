@@ -18,7 +18,8 @@ import { BookmarkSimpleIcon, CameraIcon, CheckCircleIcon, InfoIcon, ReceiptIcon,
 
 type Mode = 'signin' | 'signup' | 'reset';
 
-export default function Account() {
+/** Account screen — as the "Account" tab (inTab) or as a pop-up opened from elsewhere. */
+export function AccountView({ inTab = false }: { inTab?: boolean }) {
   const auth = useAuth();
   const { saved, toast } = useStore();
   const [mode, setMode] = useState<Mode>('signin');
@@ -103,8 +104,8 @@ export default function Account() {
   /* ---------- backend not configured ---------- */
   if (!auth.enabled) {
     return (
-      <Screen modal>
-        <BackHeader close />
+      <Screen modal={!inTab} tabs={inTab}>
+        {inTab ? null : <BackHeader close />}
         <Gutter style={{ marginTop: space.md }}>
           <Kicker>Your account</Kicker>
           <Text style={[type.displayLg, { marginTop: 8 }]}>Settings</Text>
@@ -131,8 +132,8 @@ export default function Account() {
   if (auth.user && params.mode === 'newpassword' && !passwordDone) {
     return (
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <Screen modal>
-          <BackHeader close />
+        <Screen modal={!inTab} tabs={inTab}>
+          {inTab ? null : <BackHeader close />}
           <Gutter style={{ marginTop: space.md, gap: space.lg }}>
             <View>
               <Kicker>Reset password</Kicker>
@@ -167,8 +168,8 @@ export default function Account() {
   if (auth.user) {
     const fullName = String(auth.user.user_metadata?.full_name ?? '').trim();
     return (
-      <Screen modal>
-        <BackHeader close />
+      <Screen modal={!inTab} tabs={inTab}>
+        {inTab ? null : <BackHeader close />}
         <Gutter style={{ marginTop: space.md }}>
           <Pressable onPress={changePhoto} disabled={photoBusy} accessibilityRole="button" accessibilityLabel="Change profile photo" style={{ alignSelf: 'flex-start' }}>
             <Avatar size={88} />
@@ -257,8 +258,8 @@ export default function Account() {
   const title = mode === 'signup' ? 'Create your account' : mode === 'reset' ? 'Reset your password' : 'Welcome back';
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <Screen modal>
-        <BackHeader close />
+      <Screen modal={!inTab} tabs={inTab}>
+        {inTab ? null : <BackHeader close />}
         <Gutter style={{ marginTop: space.md }}>
           <Kicker>Your account</Kicker>
           <Text style={[type.displayLg, { marginTop: 8 }]}>{title}</Text>
@@ -386,4 +387,8 @@ function ProfileEditor() {
       </Gutter>
     </Section>
   );
+}
+
+export default function Account() {
+  return <AccountView />;
 }

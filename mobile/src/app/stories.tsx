@@ -8,6 +8,7 @@ import { useStories, sharedStorage } from '@/lib/stories';
 import { Chip, ChipRow, Gutter, Kicker, PrimaryButton, Screen } from '@/components/ui';
 import { StoryCard } from '@/components/cards';
 import { CameraPlusIcon } from '@/components/icons';
+import { BackHeader } from '@/components/BackHeader';
 
 export default function Stories() {
   const width = useLayoutWidth();
@@ -27,7 +28,6 @@ export default function Stories() {
 
   return (
     <Screen
-      tabs
       refreshControl={
         <RefreshControl
           refreshing={refreshing}
@@ -40,6 +40,7 @@ export default function Stories() {
         />
       }
     >
+      <BackHeader />
       <Gutter>
         <Kicker>Come as a traveller, leave as family</Kicker>
         <Text style={[type.displayLg, { marginTop: 8 }]}>{t('stories.title')}</Text>

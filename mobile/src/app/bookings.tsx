@@ -1,5 +1,5 @@
 import { track } from '@/lib/monitoring';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ActivityIndicator, Alert, RefreshControl, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { colors, fonts, radius, space, type } from '@/theme';
@@ -8,6 +8,7 @@ import { useStore } from '@/lib/store';
 import { rupees, useCurrency } from '@/lib/currency';
 import { acceptBooking, cancelBooking, KIND_LABEL, notifyBookingsChanged, payBooking, STATUS_LABEL, useMyBookings, type Booking, type BookingKind, type BookingStatus } from '@/lib/bookings';
 import { fmtDate } from '@/components/DateField';
+import { Segmented } from '@/components/form';
 import { Card, Gutter, Kicker, PrimaryButton, Screen, SoftButton, TextButton } from '@/components/ui';
 import { BackHeader } from '@/components/BackHeader';
 import { AirplaneTiltIcon, BedIcon, CarIcon, CheckCircleIcon, ClockIcon, HouseLineIcon, ReceiptIcon, TicketIcon, UserCircleIcon, type Icon } from '@/components/icons';
@@ -126,19 +127,46 @@ function BookingCard({ b, signedIn, onChanged }: { b: Booking; signedIn: boolean
   );
 }
 
-export default function MyBookings() {
+type TripTab = 'upcoming' | 'completed' | 'cancelled';
+
+/** Upcoming / Completed / Cancelled trips. Used as the "My Trips" tab and as a pushed screen. */
+export function MyTrips({ inTab = false }: { inTab?: boolean }) {
   const { enabled, user } = useAuth();
   const { items, loading, reload } = useMyBookings();
   const [refreshing, setRefreshing] = useState(false);
+  const [tab, setTab] = useState<TripTab>('upcoming');
+  const today = new Date().toISOString().slice(0, 10);
+  const groups = useMemo(() => {
+    const g: Record<TripTab, Booking[]> = { upcoming: [], completed: [], cancelled: [] };
+    for (const b of items) {
+      if (b.status === 'cancelled') g.cancelled.push(b);
+      else if (b.status === 'completed' || (b.endDate ?? b.startDate) < today) g.completed.push(b);
+      else g.upcoming.push(b);
+    }
+    return g;
+  }, [items, today]);
+  const list = groups[tab];
 
   return (
     <Screen
+      tabs={inTab}
       refreshControl={<RefreshControl refreshing={refreshing} tintColor={colors.primary} onRefresh={async () => { setRefreshing(true); await reload(); setRefreshing(false); }} />}
     >
-      <BackHeader />
+      {inTab ? null : <BackHeader />}
+      <Gutter style={{ marginTop: inTab ? space.sm : space.md }}>
+        <Kicker>Hotels, homestays, treks, rides, flights & tickets</Kicker>
+        <Text style={[type.displayLg, { marginTop: 8 }]}>My Trips</Text>
+      </Gutter>
       <Gutter style={{ marginTop: space.md }}>
-        <Kicker>Hotels, homestays, rides, flights & tickets</Kicker>
-        <Text style={[type.displayLg, { marginTop: 8 }]}>My bookings</Text>
+        <Segmented<TripTab>
+          value={tab}
+          onChange={setTab}
+          options={[
+            { value: 'upcoming', label: `Upcoming${groups.upcoming.length ? ` (${groups.upcoming.length})` : ''}` },
+            { value: 'completed', label: 'Completed' },
+            { value: 'cancelled', label: 'Cancelled' },
+          ]}
+        />
       </Gutter>
 
       {enabled && !user ? (
@@ -146,7 +174,7 @@ export default function MyBookings() {
           <Card style={{ gap: 10 }}>
             <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 12 }}>
               <UserCircleIcon size={26} color={colors.secondary} weight="duotone" />
-              <Text style={[type.bodySm, { flex: 1 }]}>Sign in before you book to see live status, accept prices and pay here. Bookings made while signed out are confirmed by email.</Text>
+              <Text style={[type.bodySm, { flex: 1 }]}>Sign in to see live status, accept prices and pay here. Bookings made while signed out are confirmed by email.</Text>
             </View>
             <TextButton label="Sign in" onPress={() => router.push('/account')} style={{ alignSelf: 'flex-start', marginLeft: 34 }} />
           </Card>
@@ -155,20 +183,28 @@ export default function MyBookings() {
 
       {loading ? (
         <ActivityIndicator color={colors.primary} style={{ marginTop: space.xxl }} />
-      ) : items.length === 0 ? (
+      ) : list.length === 0 ? (
         <Gutter style={{ marginTop: space.xl }}>
           <Card style={{ alignItems: 'center', paddingVertical: space.xxl, gap: 8 }}>
             <ReceiptIcon size={40} color={colors.onSurfaceVariant} weight="duotone" />
-            <Text style={[type.headlineMd, { marginTop: space.sm }]}>No bookings yet</Text>
-            <Text style={[type.bodyMd, { color: colors.onSurfaceVariant, textAlign: 'center' }]}>Book a hotel, homestay, ride, flight or activity and it shows up here.</Text>
-            <SoftButton label="Book something" onPress={() => router.navigate('/')} style={{ marginTop: space.md }} />
+            <Text style={[type.headlineMd, { marginTop: space.sm }]}>{tab === 'upcoming' ? 'No upcoming trips' : tab === 'completed' ? 'No completed trips yet' : 'Nothing cancelled'}</Text>
+            {tab === 'upcoming' ? (
+              <>
+                <Text style={[type.bodyMd, { color: colors.onSurfaceVariant, textAlign: 'center' }]}>Book a hotel, trek, ride, flight or activity and it shows up here.</Text>
+                <SoftButton label="Start exploring" onPress={() => router.navigate('/')} style={{ marginTop: space.md }} />
+              </>
+            ) : null}
           </Card>
         </Gutter>
       ) : (
         <Gutter style={{ marginTop: space.lg, gap: space.md }}>
-          {items.map((b) => <BookingCard key={b.id} b={b} signedIn={!!user} onChanged={notifyBookingsChanged} />)}
+          {list.map((b) => <BookingCard key={b.id} b={b} signedIn={!!user} onChanged={notifyBookingsChanged} />)}
         </Gutter>
       )}
     </Screen>
   );
+}
+
+export default function MyBookings() {
+  return <MyTrips />;
 }

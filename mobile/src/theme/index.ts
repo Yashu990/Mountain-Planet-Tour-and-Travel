@@ -62,4 +62,7 @@ export const shadow = {
 } satisfies Record<string, ViewStyle>;
 
 /** Space reserved at the bottom of tab screens for the floating pill bar. */
-export const TAB_BAR_SPACE = 120;
+/** Extra bottom space on tab screens (the bottom bar sits below the content, not over it). */
+export const TAB_BAR_SPACE = 28;
+/** Widest the bottom navigation row gets on tablets. */
+export const MAX_TAB_WIDTH = 720;

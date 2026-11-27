@@ -68,3 +68,6 @@ export { BankIcon } from 'phosphor-react-native/src/icons/Bank';
 export { StorefrontIcon } from 'phosphor-react-native/src/icons/Storefront';
 export { XCircleIcon } from 'phosphor-react-native/src/icons/XCircle';
 export { CoffeeIcon } from 'phosphor-react-native/src/icons/Coffee';
+export { GlobeHemisphereEastIcon } from 'phosphor-react-native/src/icons/GlobeHemisphereEast';
+export { FirstAidIcon } from 'phosphor-react-native/src/icons/FirstAid';
+export { CaretUpIcon } from 'phosphor-react-native/src/icons/CaretUp';

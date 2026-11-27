@@ -46,17 +46,18 @@ export function Screen({
   modal = false,
   style,
   contentStyle,
+  pinBelowStatusBar = false,
   ...rest
-}: ScrollViewProps & { tabs?: boolean; modal?: boolean; contentStyle?: StyleProp<ViewStyle>; children: ReactNode }) {
+}: ScrollViewProps & { tabs?: boolean; modal?: boolean; contentStyle?: StyleProp<ViewStyle>; children: ReactNode; /** for sticky headers: the scroll area starts below the status bar */ pinBelowStatusBar?: boolean }) {
   const insets = useSafeAreaInsets();
   // iOS modal sheets already sit below the status bar.
-  const top = modal && Platform.OS === 'ios' ? 12 : insets.top + 12;
+  const top = pinBelowStatusBar ? 8 : modal && Platform.OS === 'ios' ? 12 : insets.top + 12;
   const coverStatusBar = !(modal && Platform.OS === 'ios');
   return (
     <View style={{ flex: 1, backgroundColor: colors.surface }}>
       <ScrollView
-        style={[{ flex: 1, backgroundColor: colors.surface }, style]}
-        contentContainerStyle={[{ paddingTop: top, paddingBottom: tabs ? TAB_BAR_SPACE + insets.bottom : insets.bottom + 40 }, contentStyle]}
+        style={[{ flex: 1, backgroundColor: colors.surface }, pinBelowStatusBar ? { marginTop: insets.top } : null, style]}
+        contentContainerStyle={[{ paddingTop: top, paddingBottom: tabs ? TAB_BAR_SPACE : insets.bottom + 40 }, contentStyle]}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
         {...rest}

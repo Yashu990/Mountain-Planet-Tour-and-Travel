@@ -1,6 +1,7 @@
 import { useI18n } from '@/lib/i18n';
 import { useLayoutWidth } from '@/lib/layout';
 import { Avatar } from '@/components/Avatar';
+import { AskAIButton } from '@/components/AskAIButton';
 import { useCurrency } from '@/lib/currency';
 import { useMemo, useState } from 'react';
 import { Image } from 'expo-image';
@@ -39,6 +40,16 @@ import {
 import { BoardCard, DestinationCard, GuideCard, HeroTourCard, StayCard, StoryCard, TourRow } from '@/components/cards';
 import {
   AirplaneTiltIcon,
+  BookOpenTextIcon,
+  CaretDownIcon,
+  CaretRightIcon,
+  CaretUpIcon,
+  CarIcon,
+  FirstAidIcon,
+  GlobeHemisphereEastIcon,
+  InfoIcon,
+  StorefrontIcon,
+  SuitcaseRollingIcon,
   BedIcon,
   CameraPlusIcon,
   CompassIcon,
@@ -49,7 +60,6 @@ import {
   MagnifyingGlassIcon,
   MapPinIcon,
   MountainsIcon,
-  ReceiptIcon,
   ShieldCheckIcon,
   SparkleIcon,
   SunIcon,
@@ -67,18 +77,27 @@ const ladder = [
   { name: 'Pokhara', m: 822, q: 'pokhara' },
 ];
 
-type GridKey = 'grid.hotels' | 'grid.homestays' | 'grid.flights' | 'grid.cabs' | 'grid.treks' | 'grid.activities' | 'grid.map' | 'grid.plan';
-
-// Services grid on the hero (reference layout).
-const quick: { icon: Icon; label: GridKey; go: () => void }[] = [
-  { icon: BedIcon, label: 'grid.hotels', go: () => router.push({ pathname: '/stays', params: { kind: 'hotel' } }) },
-  { icon: HouseLineIcon, label: 'grid.homestays', go: () => router.push({ pathname: '/stays', params: { kind: 'homestay' } }) },
-  { icon: AirplaneTiltIcon, label: 'grid.flights', go: () => router.push('/book/flight') },
-  { icon: TaxiIcon, label: 'grid.cabs', go: () => router.push('/book/cab') },
-  { icon: MountainsIcon, label: 'grid.treks', go: () => router.navigate('/explore') },
-  { icon: TicketIcon, label: 'grid.activities', go: () => router.push('/book/ticket') },
-  { icon: MapPinIcon, label: 'grid.map', go: () => router.push('/map') },
-  { icon: CompassIcon, label: 'grid.plan', go: () => router.push('/plan') },
+// Main services (big tiles) and more services (expandable grid).
+type Service = { icon: Icon; label: string; go: () => void };
+const primary: (Service & { tint: string; color: string })[] = [
+  { icon: BedIcon, label: 'Hotels', go: () => router.push({ pathname: '/stays', params: { kind: 'hotel' } }), tint: colors.primarySoft, color: colors.primary },
+  { icon: MountainsIcon, label: 'Treks & Tours', go: () => router.navigate('/explore'), tint: 'rgba(86,107,71,0.14)', color: colors.secondary },
+  { icon: AirplaneTiltIcon, label: 'Flights', go: () => router.push('/book/flight'), tint: 'rgba(62,107,154,0.14)', color: '#3E6B9A' },
+  { icon: TaxiIcon, label: 'Cabs', go: () => router.push('/book/cab'), tint: 'rgba(169,116,28,0.15)', color: '#A9741C' },
+];
+const secondary: Service[] = [
+  { icon: HouseLineIcon, label: 'Homestays', go: () => router.push({ pathname: '/stays', params: { kind: 'homestay' } }) },
+  { icon: TicketIcon, label: 'Activities', go: () => router.push('/book/ticket') },
+  { icon: CarIcon, label: 'Airport pickup', go: () => router.push('/book/cab') },
+  { icon: SunIcon, label: 'Trek tools', go: () => router.push('/tools') },
+  { icon: MapPinIcon, label: 'Map', go: () => router.push('/map') },
+  { icon: CompassIcon, label: 'Plan a trip', go: () => router.push('/plan') },
+  { icon: GlobeHemisphereEastIcon, label: 'Destinations', go: () => router.push('/destinations') },
+  { icon: BookOpenTextIcon, label: 'Traveller stories', go: () => router.push('/stories') },
+  { icon: SuitcaseRollingIcon, label: 'My trip hub', go: () => router.push('/trip') },
+  { icon: FirstAidIcon, label: 'Emergency help', go: () => router.push('/tools') },
+  { icon: StorefrontIcon, label: 'Partner with us', go: () => router.push('/partner') },
+  { icon: InfoIcon, label: 'About us', go: () => router.push('/about') },
 ];
 
 const steps = [
@@ -115,11 +134,13 @@ export default function Home() {
   const feed = useMemo(() => tours.filter((t) => t.slug !== featured.slug && (cat === 'All' || cat === 'Guides' || t.category === cat)), [cat, featured.slug, version]);
   const storyW = Math.min(200, width * 0.48);
   const cardW = useCardWidth(0.88);
+  const [showAll, setShowAll] = useState(false);
   const halfW = useHalfCardWidth();
 
   return (
-    <Screen tabs>
-      {/* header: greeting + account, bookings and Planet AI */}
+    <View style={{ flex: 1, backgroundColor: colors.surface }}>
+    <Screen tabs pinBelowStatusBar stickyHeaderIndices={[1]}>
+      {/* 0 — header: brand + greeting, profile */}
       <Gutter style={styles.header}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1 }}>
           <View style={styles.avatar}>
@@ -130,44 +151,47 @@ export default function Home() {
             <Text style={[type.headlineMd, { marginTop: 2 }]} numberOfLines={1}>{t('home.hi', { name: firstName || t('home.traveller') })}</Text>
           </View>
         </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-          <Tap onPress={() => router.push('/bookings')} style={styles.roundBtn} accessibilityRole="button" accessibilityLabel="My bookings">
-            <ReceiptIcon size={20} color={colors.onSurface} />
-          </Tap>
-          <Tap onPress={() => askAgent()} style={[styles.roundBtn, { backgroundColor: colors.primarySoft }]} accessibilityRole="button" accessibilityLabel="Open Planet AI trip planner">
-            <SparkleIcon size={20} color={colors.primary} weight="duotone" />
-          </Tap>
-          {/* profile: photo / initial / person icon — opens Account (sign in, details, photo) */}
-          <Tap onPress={() => router.push('/account')} scaleTo={0.92} accessibilityRole="button" accessibilityLabel={user ? 'Your profile' : enabled ? 'Sign in' : 'Settings'}>
-            <Avatar size={44} />
-          </Tap>
-        </View>
+        <Tap onPress={() => router.navigate('/profile')} scaleTo={0.92} accessibilityRole="button" accessibilityLabel={user ? 'Your account' : enabled ? 'Sign in' : 'Settings'}>
+          <Avatar size={44} />
+        </Tap>
       </Gutter>
 
-      <Gutter style={{ marginTop: space.lg }}>
-        <Pressable onPress={() => router.push({ pathname: '/explore', params: { focus: '1' } })} style={styles.fakeSearch} accessibilityRole="search" accessibilityLabel="Search journeys">
-          <MagnifyingGlassIcon size={20} color={colors.onSurfaceVariant} />
-          <Text style={[type.bodyMd, { color: colors.onSurfaceVariant }]}>{t('home.search')}</Text>
-        </Pressable>
-      </Gutter>
+      {/* 1 — search bar, stays pinned at the top while scrolling */}
+      <View style={styles.stickyWrap}>
+        <Gutter>
+          <Pressable onPress={() => router.push({ pathname: '/explore', params: { focus: '1' } })} style={styles.search} accessibilityRole="search" accessibilityLabel="Search treks, stays and places">
+            <MagnifyingGlassIcon size={20} color={colors.onSurfaceVariant} />
+            <Text style={[type.bodyMd, { color: colors.onSurfaceVariant, flex: 1 }]} numberOfLines={1}>Search treks, stays, places…</Text>
+            <Pressable onPress={() => askAgent()} hitSlop={8} style={styles.aiChip} accessibilityRole="button" accessibilityLabel="Ask Planet AI">
+              <SparkleIcon size={14} color={colors.primary} weight="fill" />
+              <Text style={[type.labelSm, { color: colors.primary, fontFamily: fonts.sansBold }]}>Ask AI</Text>
+            </Pressable>
+          </Pressable>
+        </Gutter>
+      </View>
 
-      {/* hero with overlapping services grid */}
-      <Gutter style={{ marginTop: space.lg }}>
-        <View style={styles.heroBox}>
-          <Image source={img('/img/hero.jpg')} style={StyleSheet.absoluteFill} contentFit="cover" accessibilityLabel="Himalayan peaks at sunrise" />
-          <LinearGradient colors={['rgba(0,0,0,0.55)', 'rgba(0,0,0,0.15)', 'transparent']} locations={[0, 0.55, 1]} style={StyleSheet.absoluteFill} />
-          <View style={{ padding: 22 }}>
-            <Text style={[type.displayMd, { color: '#fff' }]}>{t('home.headline')}</Text>
-            <Text style={[type.bodySm, { color: 'rgba(255,255,255,0.88)', marginTop: 8 }]}>{t('home.sub')}</Text>
-          </View>
+      {/* 2 — services: 4 main tiles, then a grid of more services that expands */}
+      <Gutter style={{ marginTop: space.sm, gap: space.md }}>
+        <View style={styles.primaryRow}>
+          {primary.map((q) => (
+            <Tap key={q.label} onPress={q.go} style={styles.primaryTile} scaleTo={0.95} accessibilityRole="button" accessibilityLabel={q.label}>
+              <View style={[styles.primaryIcon, { backgroundColor: q.tint }]}>
+                <q.icon size={30} color={q.color} weight="duotone" />
+              </View>
+              <Text style={styles.primaryLabel} numberOfLines={2}>{q.label}</Text>
+            </Tap>
+          ))}
         </View>
-        <View style={styles.gridCard}>
-          {quick.map((q) => (
-            <Pressable key={q.label} onPress={q.go} style={({ pressed }) => [styles.gridItem, pressed && { opacity: 0.6 }]} accessibilityRole="button" accessibilityLabel={t(q.label)}>
-              <View style={styles.gridIcon}><q.icon size={24} color={colors.secondary} weight="duotone" /></View>
-              <Text style={[type.labelSm, { textAlign: 'center' }]} numberOfLines={1}>{t(q.label)}</Text>
+        <View style={styles.moreCard}>
+          {(showAll ? secondary : secondary.slice(0, 8)).map((q) => (
+            <Pressable key={q.label} onPress={q.go} style={({ pressed }) => [styles.moreItem, pressed && { opacity: 0.6 }]} accessibilityRole="button" accessibilityLabel={q.label}>
+              <q.icon size={28} color={colors.secondary} weight="duotone" />
+              <Text style={styles.moreLabel} numberOfLines={2}>{q.label}</Text>
             </Pressable>
           ))}
+          <Pressable onPress={() => setShowAll((v) => !v)} style={styles.moreToggle} hitSlop={8} accessibilityRole="button" accessibilityLabel={showAll ? 'Show fewer services' : 'Show more services'}>
+            {showAll ? <CaretUpIcon size={18} color={colors.primary} weight="bold" /> : <CaretDownIcon size={18} color={colors.primary} weight="bold" />}
+          </Pressable>
         </View>
       </Gutter>
 
@@ -264,6 +288,22 @@ export default function Home() {
           </Gutter>
         )}
       </Section>
+
+      {/* partners: list your property */}
+      <Gutter style={{ marginTop: space.section }}>
+        <Tap onPress={() => router.push('/partner')} style={styles.partnerBanner} scaleTo={0.98} accessibilityRole="button" accessibilityLabel="List your hotel or homestay">
+          <Image source={img('/img/pokhara.jpg')} style={StyleSheet.absoluteFill} contentFit="cover" />
+          <LinearGradient colors={['rgba(24,32,22,0.88)', 'rgba(24,32,22,0.35)']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={StyleSheet.absoluteFill} />
+          <View style={{ padding: 18, gap: 4, maxWidth: '78%' }}>
+            <Text style={[type.labelUpper, { color: 'rgba(255,255,255,0.8)' }]}>For hotels & homestays</Text>
+            <Text style={[type.headlineMd, { color: '#fff' }]}>List your property and earn more</Text>
+            <Text style={[type.bodySm, { color: 'rgba(255,255,255,0.88)' }]}>Only 10% commission. Guests pay in the app or at your door.</Text>
+          </View>
+          <View style={styles.partnerArrow}>
+            <CaretRightIcon size={18} color="#fff" weight="bold" />
+          </View>
+        </Tap>
+      </Gutter>
 
       {/* destinations */}
       <Section>
@@ -375,10 +415,25 @@ export default function Home() {
         </Gutter>
       </Section>
     </Screen>
+    <AskAIButton />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  stickyWrap: { backgroundColor: colors.surface, paddingTop: space.md, paddingBottom: space.sm },
+  search: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: colors.surface, borderRadius: radius.lg, paddingLeft: 16, paddingRight: 8, paddingVertical: 8, borderWidth: 1.5, borderColor: colors.border, ...squircle, boxShadow: '0 6px 18px rgba(45,43,38,0.08)' },
+  aiChip: { flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: colors.primarySoft, borderRadius: radius.full, paddingHorizontal: 12, paddingVertical: 8 },
+  primaryRow: { flexDirection: 'row', gap: 8 },
+  primaryTile: { flex: 1, minWidth: 0, backgroundColor: colors.surfaceAlt, borderRadius: radius.xl, paddingVertical: 14, paddingHorizontal: 4, alignItems: 'center', gap: 8, ...squircle, ...shadow.hairline },
+  primaryIcon: { width: 52, height: 52, borderRadius: radius.lg, alignItems: 'center', justifyContent: 'center', ...squircle },
+  primaryLabel: { fontFamily: fonts.sansBold, fontSize: 13, lineHeight: 16, color: colors.onSurface, textAlign: 'center' },
+  moreCard: { backgroundColor: colors.surface, borderRadius: radius.xl, paddingTop: 16, paddingBottom: 26, paddingHorizontal: 4, flexDirection: 'row', flexWrap: 'wrap', rowGap: 14, borderWidth: 1, borderColor: colors.border, ...squircle, boxShadow: '0 10px 28px rgba(45,43,38,0.07)' },
+  moreItem: { width: '25%', alignItems: 'center', gap: 6, paddingHorizontal: 2 },
+  moreLabel: { fontFamily: fonts.sansMedium, fontSize: 12, lineHeight: 15, color: colors.onSurface, textAlign: 'center' },
+  moreToggle: { position: 'absolute', bottom: -14, left: '50%', marginLeft: -22, width: 44, height: 28, borderRadius: radius.full, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border, alignItems: 'center', justifyContent: 'center' },
+  partnerBanner: { height: 132, borderRadius: radius.xl, overflow: 'hidden', justifyContent: 'center', ...squircle },
+  partnerArrow: { position: 'absolute', right: 16, top: '50%', marginTop: -18, width: 36, height: 36, borderRadius: 18, backgroundColor: 'rgba(255,255,255,0.22)', alignItems: 'center', justifyContent: 'center' },
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 },
   avatar: { width: 48, height: 48, borderRadius: radius.full, backgroundColor: colors.surfaceAlt, alignItems: 'center', justifyContent: 'center', ...shadow.hairline },
   roundBtn: { width: 44, height: 44, borderRadius: radius.full, backgroundColor: colors.surfaceAlt, alignItems: 'center', justifyContent: 'center' },

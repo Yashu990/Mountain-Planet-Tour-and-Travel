@@ -1,4 +1,5 @@
 import { useI18n } from '@/lib/i18n';
+import { AskAIButton } from '@/components/AskAIButton';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, Text, TextInput, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -131,6 +132,7 @@ export default function Explore() {
   };
 
   return (
+    <View style={{ flex: 1, backgroundColor: colors.surface }}>
     <Screen tabs>
       <Gutter>
         <Kicker>{boardObj ? 'Curated board' : 'Every journey we run'}</Kicker>
@@ -211,5 +213,7 @@ export default function Explore() {
       />
       <SortSheet visible={sheet === 'sort'} onClose={() => setSheet(null)} options={SORTS} value={sort} onChange={setSort} />
     </Screen>
+    <AskAIButton />
+    </View>
   );
 }
