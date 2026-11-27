@@ -21,8 +21,8 @@ const ICON: Record<BookingKind, Icon> = { hotel: BedIcon, homestay: HouseLineIco
 
 const PILL: Record<BookingStatus, { bg: string; fg: string }> = {
   requested: { bg: colors.surface, fg: colors.onSurface },
-  quoted: { bg: 'rgba(217,90,64,0.12)', fg: colors.primary },
-  accepted: { bg: 'rgba(217,90,64,0.12)', fg: colors.primary },
+  quoted: { bg: 'rgba(220,53,75,0.12)', fg: colors.primary },
+  accepted: { bg: 'rgba(220,53,75,0.12)', fg: colors.primary },
   paid: { bg: colors.secondary, fg: colors.onSecondary },
   confirmed: { bg: colors.secondary, fg: colors.onSecondary },
   completed: { bg: colors.surface, fg: colors.onSurfaceVariant },

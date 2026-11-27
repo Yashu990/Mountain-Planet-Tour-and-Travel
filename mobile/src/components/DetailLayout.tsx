@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     paddingHorizontal: space.gutter,
     paddingTop: 12,
-    backgroundColor: 'rgba(253,252,248,0.96)',
+    backgroundColor: 'rgba(255,255,255,0.96)',
     borderTopWidth: 1,
     borderTopColor: colors.border,
   },

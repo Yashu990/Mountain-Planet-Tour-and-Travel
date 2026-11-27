@@ -196,7 +196,7 @@ export default function CabSearch() {
             {EXTRAS.map((x) => {
               const on = extras.includes(x);
               return (
-                <Pressable key={x} onPress={() => setExtras((e) => (on ? e.filter((y) => y !== x) : [...e, x]))} style={{ borderWidth: 1, borderColor: on ? colors.primary : colors.border, backgroundColor: on ? 'rgba(217,90,64,0.06)' : '#fff', borderRadius: radius.md, paddingHorizontal: 12, paddingVertical: 8 }} accessibilityRole="checkbox" accessibilityState={{ checked: on }}>
+                <Pressable key={x} onPress={() => setExtras((e) => (on ? e.filter((y) => y !== x) : [...e, x]))} style={{ borderWidth: 1, borderColor: on ? colors.primary : colors.border, backgroundColor: on ? 'rgba(220,53,75,0.06)' : '#fff', borderRadius: radius.md, paddingHorizontal: 12, paddingVertical: 8 }} accessibilityRole="checkbox" accessibilityState={{ checked: on }}>
                   <Text style={{ fontFamily: fonts.sansSemi, fontSize: 13, color: on ? colors.primary : colors.onSurface }}>{x}</Text>
                 </Pressable>
               );

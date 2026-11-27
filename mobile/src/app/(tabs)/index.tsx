@@ -53,8 +53,8 @@ const G = 16;
 
 type Service = { icon: Icon; label: string; go: () => void };
 const primary: (Service & { tint: string; color: string })[] = [
-  { icon: BedIcon, label: 'Hotels', go: () => router.push({ pathname: '/hotels', params: { kind: 'hotel' } }), tint: 'rgba(217,90,64,0.12)', color: colors.primary },
-  { icon: MountainsIcon, label: 'Treks &\nTours', go: () => router.push('/treks'), tint: 'rgba(90,107,65,0.14)', color: colors.secondary },
+  { icon: BedIcon, label: 'Hotels', go: () => router.push({ pathname: '/hotels', params: { kind: 'hotel' } }), tint: 'rgba(220,53,75,0.12)', color: colors.primary },
+  { icon: MountainsIcon, label: 'Treks &\nTours', go: () => router.push('/treks'), tint: 'rgba(51,51,51,0.14)', color: colors.secondary },
   { icon: AirplaneTiltIcon, label: 'Flights', go: () => router.push('/book/flight'), tint: 'rgba(62,107,154,0.13)', color: '#3E6B9A' },
   { icon: TaxiIcon, label: 'Cabs', go: () => router.push('/book/cab'), tint: 'rgba(169,116,28,0.15)', color: '#A9741C' },
 ];
@@ -264,7 +264,7 @@ export default function Home() {
           <HScroll gap={14}>
             {whatsNew.map((w) => (
               <Pressable key={w.label} onPress={w.go} style={{ width: 80, alignItems: 'center', gap: 6 }} accessibilityRole="button" accessibilityLabel={w.label.replace('\n', ' ')}>
-                <LinearGradient colors={[colors.primary, '#E9A27E', colors.accent]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.bubbleRing}>
+                <LinearGradient colors={[colors.primary, '#f28a98', colors.accent]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.bubbleRing}>
                   <View style={styles.bubbleInner}><Image source={img(w.img)} style={{ width: 64, height: 64, borderRadius: 32 }} contentFit="cover" /></View>
                 </LinearGradient>
                 <Text style={styles.bubbleLabel} numberOfLines={2}>{w.label}</Text>
@@ -279,7 +279,7 @@ export default function Home() {
           <View style={styles.pad}>
             <Tap onPress={() => router.push('/partner')} style={styles.hostBanner} scaleTo={0.98} accessibilityRole="button" accessibilityLabel="List your property and earn extra income">
               <Image source={img('/img/bhaktapur.jpg')} style={StyleSheet.absoluteFill} contentFit="cover" />
-              <LinearGradient colors={['transparent', 'rgba(36,52,30,0.94)']} locations={[0.15, 1]} style={StyleSheet.absoluteFill} />
+              <LinearGradient colors={['transparent', 'rgba(34,34,34,0.92)']} locations={[0.15, 1]} style={StyleSheet.absoluteFill} />
               <View style={styles.hostRow}>
                 <Text style={styles.hostText}>List your property & earn extra income</Text>
                 <CaretRightIcon size={20} color="#fff" weight="bold" />
@@ -369,9 +369,9 @@ const styles = StyleSheet.create({
   currencyChip: { borderWidth: 1, borderColor: colors.border, backgroundColor: CARD, borderRadius: radius.full, paddingHorizontal: 10, paddingVertical: 5 },
   currencyText: { fontFamily: fonts.sansBold, fontSize: 12, color: colors.onSurface },
   stickyWrap: { backgroundColor: PAGE, paddingHorizontal: G, paddingTop: 8, paddingBottom: 12 },
-  search: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: CARD, borderRadius: radius.lg, paddingLeft: 16, paddingRight: 10, paddingVertical: 12, borderWidth: 1.5, borderColor: 'rgba(217,90,64,0.55)', ...squircle, boxShadow: '0 6px 18px rgba(217,90,64,0.14)' },
+  search: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: CARD, borderRadius: radius.lg, paddingLeft: 16, paddingRight: 10, paddingVertical: 12, borderWidth: 1.5, borderColor: 'rgba(220,53,75,0.55)', ...squircle, boxShadow: '0 6px 18px rgba(220,53,75,0.14)' },
   searchText: { flex: 1, fontFamily: fonts.sans, fontSize: 16, lineHeight: 21, color: colors.onSurfaceVariant },
-  micBtn: { width: 36, height: 36, borderRadius: 18, borderWidth: 1.5, borderColor: 'rgba(217,90,64,0.45)', alignItems: 'center', justifyContent: 'center' },
+  micBtn: { width: 36, height: 36, borderRadius: 18, borderWidth: 1.5, borderColor: 'rgba(220,53,75,0.45)', alignItems: 'center', justifyContent: 'center' },
   primaryRow: { flexDirection: 'row', gap: 8 },
   primaryTile: { flex: 1, minWidth: 0, backgroundColor: CARD, borderRadius: radius.lg, paddingTop: 12, paddingBottom: 10, alignItems: 'center', gap: 6, ...squircle, boxShadow: '0 2px 8px rgba(45,43,38,0.06)' },
   primaryIcon: { width: 58, height: 58, borderRadius: radius.lg, alignItems: 'center', justifyContent: 'center', ...squircle },

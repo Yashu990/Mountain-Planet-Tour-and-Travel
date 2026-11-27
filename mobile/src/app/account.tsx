@@ -216,7 +216,7 @@ export function AccountView({ inTab = false }: { inTab?: boolean }) {
                   <ShieldCheckIcon size={24} color={colors.surface} weight="duotone" />
                   <View style={{ flex: 1 }}>
                     <Text style={[type.headlineSm, { color: colors.surface }]}>Staff panel</Text>
-                    <Text style={[type.bodySm, { color: 'rgba(253,252,248,0.75)' }]}>Bookings, prices, stories and reviews</Text>
+                    <Text style={[type.bodySm, { color: 'rgba(255,255,255,0.75)' }]}>Bookings, prices, stories and reviews</Text>
                   </View>
                 </Card>
               </Pressable>

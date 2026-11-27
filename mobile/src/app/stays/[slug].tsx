@@ -179,5 +179,5 @@ const styles = StyleSheet.create({
   counter: { position: 'absolute', right: space.gutter, bottom: 16, backgroundColor: 'rgba(0,0,0,0.45)', borderRadius: radius.full, paddingHorizontal: 12, paddingVertical: 4 },
   thumb: { width: 76, height: 76, borderRadius: radius.lg, overflow: 'hidden', borderWidth: 2, borderColor: 'transparent', backgroundColor: colors.surfaceAlt, ...squircle },
   topBar: { position: 'absolute', left: space.gutter, right: space.gutter, flexDirection: 'row', justifyContent: 'space-between' },
-  footer: { position: 'absolute', left: 0, right: 0, bottom: 0, flexDirection: 'row', alignItems: 'center', gap: space.md, paddingHorizontal: space.gutter, paddingTop: 12, backgroundColor: 'rgba(253,252,248,0.97)', borderTopWidth: 1, borderTopColor: colors.border },
+  footer: { position: 'absolute', left: 0, right: 0, bottom: 0, flexDirection: 'row', alignItems: 'center', gap: space.md, paddingHorizontal: space.gutter, paddingTop: 12, backgroundColor: 'rgba(255,255,255,0.97)', borderTopWidth: 1, borderTopColor: colors.border },
 });

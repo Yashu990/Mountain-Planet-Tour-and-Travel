@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
   tourCard: { width: 168, borderRadius: radius.lg, overflow: 'hidden', backgroundColor: colors.surfaceAlt, ...squircle },
   guideRow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginTop: 10, padding: 8, borderRadius: radius.lg, backgroundColor: colors.surfaceAlt, ...squircle },
   link: { flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-start', gap: 6, marginTop: 10, paddingHorizontal: 16, paddingVertical: 10, borderRadius: radius.full, backgroundColor: colors.primarySoft },
-  chip: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: radius.md, borderWidth: 1, borderColor: colors.border, backgroundColor: 'rgba(244,239,230,0.5)' },
+  chip: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: radius.md, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surfaceAlt },
   composer: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: space.gutter, paddingTop: 12, borderTopWidth: 1, borderTopColor: colors.border, backgroundColor: colors.surface },
   input: { flex: 1, height: 52, borderRadius: radius.full, backgroundColor: colors.surfaceAlt, paddingHorizontal: 20, fontFamily: fonts.sans, fontSize: 15, color: colors.onSurface },
   send: { width: 52, height: 52, borderRadius: radius.full, backgroundColor: colors.primary, alignItems: 'center', justifyContent: 'center' },

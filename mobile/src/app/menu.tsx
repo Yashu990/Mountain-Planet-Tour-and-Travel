@@ -114,7 +114,7 @@ export default function Menu() {
         </Pressable>
         <Pressable onPress={() => tab('/explore')} style={styles.card} accessibilityRole="button">
           <View style={styles.cardRow}>
-            <View style={[styles.badgeIcon, { backgroundColor: 'rgba(90,107,65,0.14)' }]}><CompassIcon size={22} color={colors.secondary} weight="duotone" /></View>
+            <View style={[styles.badgeIcon, { backgroundColor: 'rgba(51,51,51,0.14)' }]}><CompassIcon size={22} color={colors.secondary} weight="duotone" /></View>
             <View style={{ flex: 1 }}>
               <Text style={styles.rowLabel}>Where to go</Text>
               <Text style={styles.rowSub}>Ideas for your next Himalayan trip</Text>

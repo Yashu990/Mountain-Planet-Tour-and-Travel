@@ -1,32 +1,32 @@
-// Design tokens from degine.md — "Warm Heirloom Editorial Mobile".
+// Design tokens from newdegine.md — red on white / pale blue-grey, charcoal text, Roboto, 4–12px corners.
 import type { TextStyle, ViewStyle } from 'react-native';
 
 export const colors = {
-  primary: '#D95A40', // terracotta — one primary CTA per screen, active tab, inline links
+  primary: '#dc354b', // terracotta — one primary CTA per screen, active tab, inline links
   onPrimary: '#FFFFFF',
-  secondary: '#5A6B41', // sage — selected / on states, focus ring
+  secondary: '#333333', // sage — selected / on states, focus ring
   onSecondary: '#FFFFFF',
-  accent: '#8FA382',
-  surface: '#FDFCF8', // cream paper — every page background
-  surfaceAlt: '#F4EFE6', // biscuit — cards, inputs, inactive chips
-  onSurface: '#2D2B26', // warm charcoal — all primary text
-  onSurfaceVariant: '#8F8D84', // taupe — metadata, captions, inactive icons
-  border: '#EAE5DB',
-  destructive: '#C47055',
+  accent: '#eb4e62',
+  surface: '#ffffff', // cream paper — every page background
+  surfaceAlt: '#f2f5f9', // biscuit — cards, inputs, inactive chips
+  onSurface: '#333333', // warm charcoal — all primary text
+  onSurfaceVariant: '#808080', // taupe — metadata, captions, inactive icons
+  border: '#e5e5e5',
+  destructive: '#dc354b',
   // helpers
-  primarySoft: 'rgba(217,90,64,0.10)',
-  primarySoftPressed: 'rgba(217,90,64,0.20)',
+  primarySoft: 'rgba(220,53,75,0.08)',
+  primarySoftPressed: 'rgba(220,53,75,0.16)',
   destructiveSoft: 'rgba(196,112,85,0.08)',
   glass: 'rgba(255,255,255,0.20)',
   night: '#070D18', // only for splash / intro / photo scrims
 } as const;
 
 export const fonts = {
-  serif: 'Fraunces_500Medium',
-  sans: 'Inter_400Regular',
-  sansMedium: 'Inter_500Medium',
-  sansSemi: 'Inter_600SemiBold',
-  sansBold: 'Inter_700Bold',
+  serif: 'Roboto_700Bold',
+  sans: 'Roboto_400Regular',
+  sansMedium: 'Roboto_500Medium',
+  sansSemi: 'Roboto_500Medium',
+  sansBold: 'Roboto_700Bold',
 } as const;
 
 const ls = (size: number, em: number) => size * em;
@@ -45,9 +45,9 @@ export const type = {
   numeralStep: { fontFamily: fonts.serif, fontSize: 48, lineHeight: 52, letterSpacing: ls(48, -0.02), color: 'rgba(90,107,65,0.30)' },
 } satisfies Record<string, TextStyle>;
 
-export const radius = { sm: 8, md: 12, lg: 16, xl: 24, xxl: 40, hero: 32, full: 9999 } as const;
+export const radius = { sm: 4, md: 8, lg: 8, xl: 12, xxl: 16, hero: 16, full: 9999 } as const;
 
-export const space = { xs: 4, sm: 8, md: 16, lg: 24, xl: 32, xxl: 48, gutter: 24, card: 24, section: 40 } as const;
+export const space = { xs: 4, sm: 8, md: 12, lg: 16, xl: 24, xxl: 40, gutter: 16, card: 16, section: 28 } as const;
 
 /** Squircle-ish corners on iOS (continuous curve); plain rounding elsewhere. */
 export const squircle = { borderCurve: 'continuous' as const };

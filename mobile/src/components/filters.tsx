@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
   sheetHead: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: space.gutter, marginBottom: space.md },
   close: { width: 36, height: 36, borderRadius: radius.full, backgroundColor: colors.surfaceAlt, alignItems: 'center', justifyContent: 'center' },
   footer: { paddingHorizontal: space.gutter, paddingTop: 12, borderTopWidth: 1, borderTopColor: colors.border, backgroundColor: colors.surface },
-  opt: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 16, paddingVertical: 10, borderRadius: radius.md, borderWidth: 1, borderColor: colors.border, backgroundColor: 'rgba(244,239,230,0.5)', ...squircle },
+  opt: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 16, paddingVertical: 10, borderRadius: radius.md, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surfaceAlt, ...squircle },
   optOn: { backgroundColor: colors.secondary, borderColor: colors.secondary },
   sortRow: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: space.gutter, paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: colors.border },
 });

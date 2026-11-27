@@ -186,7 +186,7 @@ export function Box({
   return (
     <Pressable
       onPress={onPress}
-      style={({ pressed }) => [styles.box, accent && { borderColor: colors.primary, backgroundColor: 'rgba(217,90,64,0.04)' }, pressed && { opacity: 0.75 }, style]}
+      style={({ pressed }) => [styles.box, accent && { borderColor: colors.primary, backgroundColor: 'rgba(220,53,75,0.04)' }, pressed && { opacity: 0.75 }, style]}
       accessibilityRole="button"
       accessibilityLabel={`${label}: ${value || placeholder || ''}`}
     >
@@ -242,7 +242,7 @@ export function FormCard({ children }: { children: ReactNode }) {
 export function BigButton({ label, onPress, compact, disabled }: { label: string; onPress: () => void; compact?: boolean; disabled?: boolean }) {
   return (
     <Pressable onPress={onPress} disabled={disabled} style={({ pressed }) => [styles.big, compact && styles.bigCompact, (pressed || disabled) && { opacity: 0.8 }]} accessibilityRole="button" accessibilityLabel={label}>
-      <LinearGradient colors={['#E4734F', colors.primary]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={[StyleSheet.absoluteFill, { borderRadius: radius.md }]} />
+      <LinearGradient colors={['#eb4e62', colors.primary]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={[StyleSheet.absoluteFill, { borderRadius: radius.md }]} />
       {!compact ? <MagnifyingGlassIcon size={18} color="#fff" weight="bold" /> : null}
       <Text style={[styles.bigText, compact && { fontSize: 13 }]}>{label}</Text>
     </Pressable>
@@ -487,7 +487,7 @@ export function TopList({ items }: { items: { place: string; title: string; pric
 
 export function TrustStrip({ big, text }: { big: string; text: string }) {
   return (
-    <LinearGradient colors={['rgba(90,107,65,0.14)', 'rgba(90,107,65,0.02)']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.trust}>
+    <LinearGradient colors={['rgba(51,51,51,0.14)', 'rgba(51,51,51,0.02)']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.trust}>
       <Text style={styles.trustBig}>{big}</Text>
       <Text style={styles.trustText}>{text}</Text>
     </LinearGradient>
@@ -559,9 +559,9 @@ const styles = StyleSheet.create({
   formCard: { gap: 10 },
   modeRow: { flexDirection: 'row', borderWidth: 1, borderColor: colors.border, borderRadius: radius.md, padding: 3, backgroundColor: CARD },
   mode: { flex: 1, paddingVertical: 9, alignItems: 'center', borderRadius: radius.sm, borderWidth: 1, borderColor: 'transparent' },
-  modeOn: { borderColor: colors.primary, backgroundColor: 'rgba(217,90,64,0.07)' },
+  modeOn: { borderColor: colors.primary, backgroundColor: 'rgba(220,53,75,0.07)' },
   modeText: { fontFamily: fonts.sansSemi, fontSize: 13, color: colors.onSurfaceVariant, letterSpacing: 0.3 },
-  box: { flexDirection: 'row', alignItems: 'center', gap: 10, backgroundColor: '#FBF9F5', borderWidth: 1, borderColor: colors.border, borderRadius: radius.md, paddingHorizontal: 12, paddingVertical: 9, minHeight: 62 },
+  box: { flexDirection: 'row', alignItems: 'center', gap: 10, backgroundColor: '#ffffff', borderWidth: 1, borderColor: colors.border, borderRadius: radius.md, paddingHorizontal: 12, paddingVertical: 9, minHeight: 62 },
   boxLabel: { fontFamily: fonts.sansSemi, fontSize: 11, letterSpacing: 0.6, color: colors.onSurfaceVariant, textTransform: 'uppercase' },
   boxValue: { fontFamily: fonts.sansBold, fontSize: 18, color: colors.onSurface, marginTop: 1 },
   boxPlaceholder: { fontFamily: fonts.sansSemi, fontSize: 16, color: colors.primary, marginTop: 2 },
@@ -569,12 +569,12 @@ const styles = StyleSheet.create({
   swap: { position: 'absolute', left: '50%', top: '50%', marginLeft: -16, marginTop: -16, width: 32, height: 32, borderRadius: 16, backgroundColor: CARD, borderWidth: 1, borderColor: colors.border, alignItems: 'center', justifyContent: 'center' },
   nights: { borderWidth: 1, borderColor: colors.border, borderRadius: radius.full, paddingHorizontal: 10, paddingVertical: 3, backgroundColor: CARD },
   nightsText: { fontFamily: fonts.sansSemi, fontSize: 11, color: colors.onSurfaceVariant },
-  big: { marginTop: 14, height: 52, borderRadius: radius.md, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, overflow: 'hidden', boxShadow: '0 6px 16px rgba(217,90,64,0.28)' },
+  big: { marginTop: 14, height: 52, borderRadius: radius.md, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, overflow: 'hidden', boxShadow: '0 6px 16px rgba(220,53,75,0.28)' },
   bigCompact: { marginTop: 0, height: 40, paddingHorizontal: 18 },
   bigText: { fontFamily: fonts.sansBold, fontSize: 16, letterSpacing: 1, color: '#fff' },
   chipLabel: { fontFamily: fonts.sansSemi, fontSize: 12, letterSpacing: 0.5, color: colors.onSurfaceVariant, textTransform: 'uppercase', marginTop: 4 },
   optChip: { borderWidth: 1, borderColor: colors.border, borderRadius: radius.md, paddingHorizontal: 12, paddingVertical: 8, backgroundColor: CARD },
-  optChipOn: { borderColor: colors.primary, backgroundColor: 'rgba(217,90,64,0.06)' },
+  optChipOn: { borderColor: colors.primary, backgroundColor: 'rgba(220,53,75,0.06)' },
   optChipText: { fontFamily: fonts.sansSemi, fontSize: 13, color: colors.onSurface },
   optChipSub: { fontFamily: fonts.sans, fontSize: 11.5, color: colors.secondary, marginTop: 1 },
   pinBar: { position: 'absolute', left: 0, right: 0, flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: G, paddingVertical: 8, backgroundColor: CARD, borderBottomWidth: 1, borderBottomColor: colors.border, boxShadow: '0 6px 14px rgba(45,43,38,0.08)', maxWidth: MAX_CONTENT_WIDTH, alignSelf: 'center' },

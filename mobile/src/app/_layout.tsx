@@ -6,11 +6,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
-import { Fraunces_500Medium } from '@expo-google-fonts/fraunces/500Medium';
-import { Inter_400Regular } from '@expo-google-fonts/inter/400Regular';
-import { Inter_500Medium } from '@expo-google-fonts/inter/500Medium';
-import { Inter_600SemiBold } from '@expo-google-fonts/inter/600SemiBold';
-import { Inter_700Bold } from '@expo-google-fonts/inter/700Bold';
+import { Roboto_400Regular } from '@expo-google-fonts/roboto/400Regular';
+import { Roboto_500Medium } from '@expo-google-fonts/roboto/500Medium';
+import { Roboto_700Bold } from '@expo-google-fonts/roboto/700Bold';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StoreProvider } from '@/lib/store';
 import { AuthProvider, useAuth } from '@/lib/auth';
@@ -71,7 +69,7 @@ function Boot({ introDone }: { introDone: boolean }) {
 }
 
 function RootLayout() {
-  const [fontsLoaded, fontError] = useFonts({ Fraunces_500Medium, Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold });
+  const [fontsLoaded, fontError] = useFonts({ Roboto_400Regular, Roboto_500Medium, Roboto_700Bold });
   // The intro plays on every launch, like the website does on every refresh.
   const [introDone, setIntroDone] = useState(false);
   const ready = fontsLoaded || !!fontError;

@@ -19,7 +19,7 @@ export default function Welcome() {
       <StatusBar style="light" />
       <View style={{ height: 340 }}>
         <Image source={img('/img/hero.jpg')} style={StyleSheet.absoluteFill} contentFit="cover" accessibilityLabel="Himalayan peaks at sunrise" />
-        <LinearGradient colors={['rgba(0,0,0,0.35)', 'rgba(0,0,0,0.05)', 'rgba(253,252,248,1)']} locations={[0, 0.5, 1]} style={StyleSheet.absoluteFill} />
+        <LinearGradient colors={['rgba(0,0,0,0.35)', 'rgba(0,0,0,0.05)', 'rgba(255,255,255,1)']} locations={[0, 0.5, 1]} style={StyleSheet.absoluteFill} />
         <Image source={brand.mark} style={{ position: 'absolute', top: insets.top + 24, left: space.gutter, width: 72, height: 42 }} contentFit="contain" />
       </View>
       <View style={{ flex: 1, paddingHorizontal: space.gutter, marginTop: -60, gap: space.lg }}>

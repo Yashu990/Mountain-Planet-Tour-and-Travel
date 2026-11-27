@@ -323,7 +323,7 @@ const styles = StyleSheet.create({
   pinned: { backgroundColor: '#FFFFFF', paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: colors.border, boxShadow: '0 4px 12px rgba(45,43,38,0.06)' },
   topRow: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 8, paddingTop: 6, paddingBottom: 10 },
   backBtn: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
-  summary: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10, backgroundColor: '#FBF9F5', borderWidth: 1, borderColor: colors.border, borderRadius: radius.md, paddingHorizontal: 14, paddingVertical: 8, marginRight: 8 },
+  summary: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10, backgroundColor: '#ffffff', borderWidth: 1, borderColor: colors.border, borderRadius: radius.md, paddingHorizontal: 14, paddingVertical: 8, marginRight: 8 },
   sumWhere: { fontFamily: fonts.sansBold, fontSize: 16, color: colors.onSurface },
   sumMeta: { fontFamily: fonts.sans, fontSize: 12.5, color: colors.onSurfaceVariant, marginTop: 1 },
   heading: { fontFamily: fonts.serif, fontSize: 22, color: colors.onSurface },

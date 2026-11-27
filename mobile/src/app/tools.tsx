@@ -104,7 +104,7 @@ function Altitude() {
           <View style={{ width: 22, height: 22, borderRadius: radius.sm, borderWidth: 1.5, borderColor: danger ? colors.destructive : colors.onSurfaceVariant, backgroundColor: danger ? colors.destructive : 'transparent', alignItems: 'center', justifyContent: 'center' }}>{danger ? <CheckIcon size={14} color="#fff" weight="bold" /> : null}</View>
           <Text style={[type.bodySm, { flex: 1 }]}>Confused, unsteady walking, or short of breath even when resting</Text>
         </Pressable>
-        <View style={{ padding: 16, borderRadius: radius.md, backgroundColor: result.tone === 'ok' ? 'rgba(90,107,65,0.10)' : 'rgba(196,112,85,0.12)', ...squircle }}>
+        <View style={{ padding: 16, borderRadius: radius.md, backgroundColor: result.tone === 'ok' ? 'rgba(51,51,51,0.10)' : 'rgba(196,112,85,0.12)', ...squircle }}>
           <Text style={[type.bodySm, { fontFamily: fonts.sansMedium, color: result.tone === 'ok' ? colors.secondary : colors.destructive }]}>{result.text}</Text>
         </View>
         <Text style={[type.bodySm, { color: colors.onSurfaceVariant, fontSize: 12 }]}>This is a guide, not medical advice. When in doubt, go down.</Text>

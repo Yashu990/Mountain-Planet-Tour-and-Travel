@@ -91,6 +91,6 @@ const styles = StyleSheet.create({
   line: { flexDirection: 'row', gap: 12, paddingVertical: 2 },
   lineK: { width: 110, fontFamily: fonts.sans, fontSize: 13.5, color: colors.onSurfaceVariant },
   lineV: { flex: 1, fontFamily: fonts.sansSemi, fontSize: 14, color: colors.onSurface },
-  note: { backgroundColor: 'rgba(90,107,65,0.10)', borderRadius: radius.md, padding: 12 },
+  note: { backgroundColor: 'rgba(51,51,51,0.10)', borderRadius: radius.md, padding: 12 },
   noteText: { fontFamily: fonts.sans, fontSize: 13, lineHeight: 18, color: colors.onSurface },
 });

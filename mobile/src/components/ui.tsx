@@ -65,7 +65,7 @@ export function Screen({
         {children}
       </ScrollView>
       {/* cream band behind the status bar so scrolled content never runs under the clock */}
-      {coverStatusBar ? <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: insets.top, backgroundColor: 'rgba(253,252,248,0.96)' }} /> : null}
+      {coverStatusBar ? <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: insets.top, backgroundColor: 'rgba(255,255,255,0.96)' }} /> : null}
     </View>
   );
 }
@@ -361,7 +361,7 @@ const styles = StyleSheet.create({
   glass: { width: 44, height: 44, borderRadius: radius.full, backgroundColor: colors.glass, alignItems: 'center', justifyContent: 'center', ...shadow.glass },
   chip: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 20, paddingVertical: 11, borderRadius: radius.full, backgroundColor: colors.surfaceAlt },
   chipActive: { backgroundColor: colors.secondary },
-  tag: { paddingHorizontal: 16, paddingVertical: 8, borderRadius: radius.md, backgroundColor: 'rgba(244,239,230,0.5)', borderWidth: 1, borderColor: colors.border, ...squircle },
+  tag: { paddingHorizontal: 16, paddingVertical: 8, borderRadius: radius.md, backgroundColor: colors.surfaceAlt, borderWidth: 1, borderColor: colors.border, ...squircle },
   badge: { alignSelf: 'flex-start', backgroundColor: colors.primary, borderRadius: radius.full, paddingHorizontal: 12, paddingVertical: 4 },
   card: { backgroundColor: colors.surfaceAlt, borderRadius: radius.xl, padding: space.card, ...squircle, ...shadow.hairline },
   callout: { flexDirection: 'row', gap: 12, alignItems: 'flex-start', backgroundColor: colors.destructiveSoft, borderRadius: radius.md, padding: 16, ...squircle },

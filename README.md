@@ -7,7 +7,7 @@ Treks, tours and Himalayan adventures — mobile app + backend.
 | [`mobile/`](mobile/) | The React Native app (Expo SDK 58, Expo Router). Run it with `cd mobile && npm install && npx expo start`. |
 | [`backend/`](backend/) | Supabase backend: database tables, security rules, seed data, photo storage and Edge Functions. |
 | [`website/`](website/) | Static website generated from the app data: every trip page the app shares, privacy & terms. `cd website && node build.ts`. |
-| [`degine.md`](degine.md) | The design system the app follows (colours, type, components). |
+| [`mobile/newdegine.md`](mobile/newdegine.md) | The design the app follows now: red on white / pale blue-grey, charcoal text, Roboto, 4–12px corners. ([`degine.md`](degine.md) is the earlier warm cream design.) |
 | [`CHECKLIST.md`](CHECKLIST.md) | What is built, what switches on with your keys, and what only you can provide. |
 
 The app works on its own with bundled content. Connect it to the backend (see `backend/README.md`)
