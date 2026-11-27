@@ -53,24 +53,24 @@ const G = 16;
 
 type Service = { icon: Icon; label: string; go: () => void };
 const primary: (Service & { tint: string; color: string })[] = [
-  { icon: BedIcon, label: 'Hotels', go: () => router.push({ pathname: '/hotels', params: { kind: 'hotel' } }), tint: 'rgba(220,53,75,0.12)', color: colors.primary },
-  { icon: MountainsIcon, label: 'Treks &\nTours', go: () => router.push('/treks'), tint: 'rgba(51,51,51,0.14)', color: colors.secondary },
-  { icon: AirplaneTiltIcon, label: 'Flights', go: () => router.push('/book/flight'), tint: 'rgba(62,107,154,0.13)', color: '#3E6B9A' },
-  { icon: TaxiIcon, label: 'Cabs', go: () => router.push('/book/cab'), tint: 'rgba(169,116,28,0.15)', color: '#A9741C' },
+  { icon: BedIcon, label: 'Hotels', go: () => router.push({ pathname: '/hotels', params: { kind: 'hotel' } }), tint: 'rgba(220,53,75,0.12)', color: '#dc354b' },
+  { icon: MountainsIcon, label: 'Treks &\nTours', go: () => router.push('/treks'), tint: 'rgba(47,158,68,0.14)', color: '#2F9E44' },
+  { icon: AirplaneTiltIcon, label: 'Flights', go: () => router.push('/book/flight'), tint: 'rgba(28,126,214,0.13)', color: '#1C7ED6' },
+  { icon: TaxiIcon, label: 'Cabs', go: () => router.push('/book/cab'), tint: 'rgba(240,140,0,0.15)', color: '#F08C00' },
 ];
-const secondary: Service[] = [
-  { icon: HouseLineIcon, label: 'Homestays\n& Villages', go: () => router.push({ pathname: '/hotels', params: { kind: 'homestay' } }) },
-  { icon: TicketIcon, label: 'Activities\n& Tickets', go: () => router.push('/book/ticket') },
-  { icon: CarIcon, label: 'Airport\nPickup', go: () => router.push('/book/cab') },
-  { icon: SunIcon, label: 'Trek Tools\n& Weather', go: () => router.push('/tools') },
-  { icon: MapPinIcon, label: 'Map', go: () => router.push('/map') },
-  { icon: CompassIcon, label: 'Plan a\nTrip', go: () => router.push('/plan') },
-  { icon: GlobeHemisphereEastIcon, label: 'Destinations', go: () => router.push('/destinations') },
-  { icon: BookOpenTextIcon, label: 'Traveller\nStories', go: () => router.push('/stories') },
-  { icon: SuitcaseRollingIcon, label: 'My Trip\nHub', go: () => router.push('/trip') },
-  { icon: FirstAidIcon, label: 'Emergency\nHelp', go: () => router.push('/tools') },
-  { icon: StorefrontIcon, label: 'Partner\nwith Us', go: () => router.push('/partner') },
-  { icon: InfoIcon, label: 'About\nUs', go: () => router.push('/about') },
+const secondary: (Service & { color: string })[] = [
+  { icon: HouseLineIcon, label: 'Homestays\n& Villages', color: '#E8590C', go: () => router.push({ pathname: '/hotels', params: { kind: 'homestay' } }) },
+  { icon: TicketIcon, label: 'Activities\n& Tickets', color: '#D6336C', go: () => router.push('/book/ticket') },
+  { icon: CarIcon, label: 'Airport\nPickup', color: '#1C7ED6', go: () => router.push('/book/cab') },
+  { icon: SunIcon, label: 'Trek Tools\n& Weather', color: '#F08C00', go: () => router.push('/tools') },
+  { icon: MapPinIcon, label: 'Map', color: '#2F9E44', go: () => router.push('/map') },
+  { icon: CompassIcon, label: 'Plan a\nTrip', color: '#7048E8', go: () => router.push('/plan') },
+  { icon: GlobeHemisphereEastIcon, label: 'Destinations', color: '#0C8599', go: () => router.push('/destinations') },
+  { icon: BookOpenTextIcon, label: 'Traveller\nStories', color: '#AE3EC9', go: () => router.push('/stories') },
+  { icon: SuitcaseRollingIcon, label: 'My Trip\nHub', color: '#4263EB', go: () => router.push('/trip') },
+  { icon: FirstAidIcon, label: 'Emergency\nHelp', color: '#E03131', go: () => router.push('/tools') },
+  { icon: StorefrontIcon, label: 'Partner\nwith Us', color: '#5C940D', go: () => router.push('/partner') },
+  { icon: InfoIcon, label: 'About\nUs', color: '#495057', go: () => router.push('/about') },
 ];
 
 const regions = [
@@ -191,7 +191,9 @@ export default function Home() {
           <View style={styles.moreCard}>
             {(showAll ? secondary : secondary.slice(0, 8)).map((q) => (
               <Pressable key={q.label} onPress={q.go} style={({ pressed }) => [styles.moreItem, pressed && { opacity: 0.55 }]} accessibilityRole="button" accessibilityLabel={q.label.replace('\n', ' ')}>
-                <q.icon size={30} color={colors.secondary} weight="duotone" />
+                <View style={[styles.moreIcon, { backgroundColor: q.color + '1A' }]}>
+                  <q.icon size={26} color={q.color} weight="duotone" />
+                </View>
                 <Text style={styles.moreLabel} numberOfLines={2}>{q.label}</Text>
               </Pressable>
             ))}
@@ -378,6 +380,7 @@ const styles = StyleSheet.create({
   primaryLabel: { fontFamily: fonts.sansBold, fontSize: 14, lineHeight: 17, color: colors.onSurface, textAlign: 'center' },
   moreCard: { backgroundColor: CARD, borderRadius: radius.lg, paddingTop: 18, paddingBottom: 16, flexDirection: 'row', flexWrap: 'wrap', rowGap: 18, ...squircle, boxShadow: '0 2px 8px rgba(45,43,38,0.06)' },
   moreItem: { width: '25%', alignItems: 'center', gap: 6, paddingHorizontal: 2 },
+  moreIcon: { width: 48, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center' },
   moreLabel: { fontFamily: fonts.sans, fontSize: 12.5, lineHeight: 16, color: colors.onSurface, textAlign: 'center' },
   moreTab: { alignSelf: 'center', width: 64, height: 24, backgroundColor: CARD, borderBottomLeftRadius: 14, borderBottomRightRadius: 14, alignItems: 'center', justifyContent: 'center' },
   section: { marginTop: 26 },
