@@ -1,6 +1,10 @@
 import { track } from '@/lib/monitoring';
 import { useMemo, useState } from 'react';
-import { ActivityIndicator, Alert, RefreshControl, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Image } from 'expo-image';
+import { LinearGradient } from 'expo-linear-gradient';
+import { img } from '@/lib/images';
+import { useLayoutWidth } from '@/lib/layout';
 import { router } from 'expo-router';
 import { colors, fonts, radius, space, type } from '@/theme';
 import { useAuth } from '@/lib/auth';
@@ -11,7 +15,7 @@ import { fmtDate } from '@/components/DateField';
 import { Segmented } from '@/components/form';
 import { Card, Gutter, Kicker, PrimaryButton, Screen, SoftButton, TextButton } from '@/components/ui';
 import { BackHeader } from '@/components/BackHeader';
-import { AirplaneTiltIcon, BedIcon, CarIcon, CheckCircleIcon, ClockIcon, HouseLineIcon, ReceiptIcon, TicketIcon, UserCircleIcon, type Icon } from '@/components/icons';
+import { AirplaneTiltIcon, BedIcon, CaretRightIcon, CarIcon, CheckCircleIcon, ClockIcon, HouseLineIcon, TicketIcon, UserCircleIcon, type Icon } from '@/components/icons';
 
 const ICON: Record<BookingKind, Icon> = { hotel: BedIcon, homestay: HouseLineIcon, cab: CarIcon, flight: AirplaneTiltIcon, ticket: TicketIcon };
 
@@ -129,6 +133,34 @@ function BookingCard({ b, signedIn, onChanged }: { b: Booking; signedIn: boolean
 
 type TripTab = 'upcoming' | 'completed' | 'cancelled';
 
+const IDEAS: { label: string; img: string; cat: string }[] = [
+  { label: 'TREKKING', img: '/img/ebc.jpg', cat: 'Trekking' },
+  { label: 'CULTURE', img: '/img/kathmandu.jpg', cat: 'Culture' },
+  { label: 'WILDLIFE', img: '/img/chitwan.jpg', cat: 'Wildlife' },
+  { label: 'ADVENTURE', img: '/img/paragliding.jpg', cat: 'Adventure' },
+  { label: 'HELI TOURS', img: '/img/heli.jpg', cat: 'Heli Tours' },
+  { label: 'PEAK CLIMBING', img: '/img/climb.jpg', cat: 'Peak Climbing' },
+];
+
+/** Big swipeable trip-idea cards shown when there are no bookings yet. */
+function TripIdeas() {
+  const w = Math.round(useLayoutWidth() * 0.6);
+  return (
+    <ScrollView horizontal showsHorizontalScrollIndicator={false} snapToInterval={w + 12} decelerationRate="fast" contentContainerStyle={{ paddingHorizontal: space.gutter, gap: 12, paddingTop: space.lg }}>
+      {IDEAS.map((x) => (
+        <Pressable key={x.label} onPress={() => router.navigate({ pathname: '/explore', params: { cat: x.cat } })} style={{ width: w, height: w * 1.25, borderRadius: radius.xl, overflow: 'hidden', justifyContent: 'flex-end' }} accessibilityRole="button" accessibilityLabel={x.label}>
+          <Image source={img(x.img)} style={StyleSheet.absoluteFill} contentFit="cover" />
+          <LinearGradient colors={['transparent', 'rgba(7,13,24,0.8)']} locations={[0.45, 1]} style={StyleSheet.absoluteFill} />
+          <View style={{ flexDirection: 'row', alignItems: 'center', padding: 18 }}>
+            <Text style={{ flex: 1, fontFamily: fonts.sansBold, fontSize: 18, letterSpacing: 1, color: '#fff' }}>{x.label}</Text>
+            <CaretRightIcon size={20} color="#fff" weight="bold" />
+          </View>
+        </Pressable>
+      ))}
+    </ScrollView>
+  );
+}
+
 /** Upcoming / Completed / Cancelled trips. Used as the "My Trips" tab and as a pushed screen. */
 export function MyTrips({ inTab = false }: { inTab?: boolean }) {
   const { enabled, user } = useAuth();
@@ -184,18 +216,15 @@ export function MyTrips({ inTab = false }: { inTab?: boolean }) {
       {loading ? (
         <ActivityIndicator color={colors.primary} style={{ marginTop: space.xxl }} />
       ) : list.length === 0 ? (
-        <Gutter style={{ marginTop: space.xl }}>
-          <Card style={{ alignItems: 'center', paddingVertical: space.xxl, gap: 8 }}>
-            <ReceiptIcon size={40} color={colors.onSurfaceVariant} weight="duotone" />
-            <Text style={[type.headlineMd, { marginTop: space.sm }]}>{tab === 'upcoming' ? 'No upcoming trips' : tab === 'completed' ? 'No completed trips yet' : 'Nothing cancelled'}</Text>
-            {tab === 'upcoming' ? (
-              <>
-                <Text style={[type.bodyMd, { color: colors.onSurfaceVariant, textAlign: 'center' }]}>Book a hotel, trek, ride, flight or activity and it shows up here.</Text>
-                <SoftButton label="Start exploring" onPress={() => router.navigate('/')} style={{ marginTop: space.md }} />
-              </>
-            ) : null}
-          </Card>
-        </Gutter>
+        <View>
+          <Gutter style={{ marginTop: space.xl }}>
+            <View style={{ alignItems: 'center', gap: 4 }}>
+              <Text style={[type.headlineMd, { textAlign: 'center' }]}>{tab === 'upcoming' ? 'No bookings yet' : tab === 'completed' ? 'No completed trips yet' : 'Nothing cancelled'}</Text>
+              <Text style={[type.bodyMd, { color: colors.onSurfaceVariant, textAlign: 'center' }]}>Start exploring for your next trip</Text>
+            </View>
+          </Gutter>
+          {tab === 'upcoming' ? <TripIdeas /> : null}
+        </View>
       ) : (
         <Gutter style={{ marginTop: space.lg, gap: space.md }}>
           {list.map((b) => <BookingCard key={b.id} b={b} signedIn={!!user} onChanged={notifyBookingsChanged} />)}

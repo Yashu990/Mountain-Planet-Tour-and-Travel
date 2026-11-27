@@ -41,7 +41,7 @@ function Perk({ icon: I, title, text }: { icon: Icon; title: string; text: strin
   );
 }
 
-export default function PartnerHome() {
+export default function PartnerHome({ inTab = false }: { inTab?: boolean }) {
   const { user, enabled, signOut } = useAuth();
   const { partner, loading, refresh } = useMyPartner(user?.id);
   useFocusEffect(
@@ -52,8 +52,8 @@ export default function PartnerHome() {
 
   if (!enabled) {
     return (
-      <Screen>
-        <BackHeader />
+      <Screen tabs={inTab}>
+        {inTab ? null : <BackHeader />}
         <Gutter style={{ marginTop: space.lg }}>
           <Callout icon={InfoIcon}>Partner sign-up needs the app to be connected to our servers. Please try again later.</Callout>
         </Gutter>
@@ -64,8 +64,8 @@ export default function PartnerHome() {
   /* ---------- signed out: pitch + partner login ---------- */
   if (!user) {
     return (
-      <Screen>
-        <BackHeader />
+      <Screen tabs={inTab}>
+        {inTab ? null : <BackHeader />}
         <Gutter style={{ marginTop: space.md }}>
           <Kicker style={{ color: colors.primary }}>For hotels & homestays</Kicker>
           <Text style={[type.displayLg, { marginTop: 8 }]}>Grow with Mountain Planet</Text>
@@ -94,16 +94,16 @@ export default function PartnerHome() {
 
   if (loading && !partner) {
     return (
-      <Screen>
-        <BackHeader />
+      <Screen tabs={inTab}>
+        {inTab ? null : <BackHeader />}
         <ActivityIndicator color={colors.primary} style={{ marginTop: 80 }} />
       </Screen>
     );
   }
 
   return (
-    <Screen>
-      <BackHeader />
+    <Screen tabs={inTab}>
+      {inTab ? null : <BackHeader />}
       <Gutter style={{ marginTop: space.md }}>
         <Kicker style={{ color: colors.primary }}>Partner</Kicker>
         <Text style={[type.displayLg, { marginTop: 8 }]}>{partner?.business_name || 'Your partner account'}</Text>

@@ -4,14 +4,14 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import type { BottomTabBarProps } from 'expo-router/tabs';
 import { colors, fonts, MAX_TAB_WIDTH } from '@/theme';
-import { BookmarkSimpleIcon, CompassIcon, HouseIcon, SuitcaseRollingIcon, UserCircleIcon, type Icon } from './icons';
+import { CompassIcon, HeartIcon, HouseIcon, StorefrontIcon, SuitcaseRollingIcon, type Icon } from './icons';
 
 export const TABS: Record<string, { icon: Icon; label: string }> = {
   index: { icon: HouseIcon, label: 'Home' },
-  explore: { icon: CompassIcon, label: 'Explore' },
   trips: { icon: SuitcaseRollingIcon, label: 'My Trips' },
-  saved: { icon: BookmarkSimpleIcon, label: 'Saved' },
-  profile: { icon: UserCircleIcon, label: 'Account' },
+  explore: { icon: CompassIcon, label: 'Where to Go' },
+  saved: { icon: HeartIcon, label: 'Wishlist' },
+  host: { icon: StorefrontIcon, label: 'Be a Host' },
 };
 
 export function BottomTabBar({ state, emitter, navigateToTab, insets }: BottomTabBarProps) {

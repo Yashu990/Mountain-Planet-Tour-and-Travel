@@ -1,6 +1,7 @@
 import { useI18n } from '@/lib/i18n';
 import { MAX_CONTENT_WIDTH } from '@/lib/layout';
 import { useStayPrice } from '@/lib/stayPrice';
+import { addRecentSearch } from '@/lib/recent';
 import { useMemo, useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Image } from 'expo-image';
@@ -304,7 +305,7 @@ export default function Stays() {
         </Card>
       </Gutter>
 
-      <SearchSheet visible={sheet === 'search'} onClose={() => setSheet(null)} value={search} onApply={setSearch} cities={cities} />
+      <SearchSheet visible={sheet === 'search'} onClose={() => setSheet(null)} value={search} onApply={(v) => { setSearch(v); addRecentSearch({ kind: 'stay', where: v.where, checkIn: v.checkIn ? isoDay(v.checkIn) : null, checkOut: v.checkOut ? isoDay(v.checkOut) : null, rooms: v.rooms, guests: v.adults + v.children }); }} cities={cities} />
       <FilterSheet visible={sheet === 'filters'} onClose={() => setSheet(null)} groups={groups} value={filters} onApply={setFilters} countFor={(f) => apply(all, search, f, usd).length} noun="properties" />
       <SortSheet visible={sheet === 'sort'} onClose={() => setSheet(null)} options={SORTS} value={sort} onChange={setSort} />
     </Screen>

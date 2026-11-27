@@ -104,6 +104,7 @@ function RootLayout() {
             <Stack.Screen name="ai" options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
             <Stack.Screen name="share-story" options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
             <Stack.Screen name="account" options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
+            <Stack.Screen name="menu" options={{ presentation: "transparentModal", animation: "slide_from_left" }} />
             <Stack.Screen name="story/[id]" options={{ presentation: 'fullScreenModal', animation: 'fade' }} />
             <Stack.Screen name="welcome" options={{ presentation: 'fullScreenModal', animation: 'fade' }} />
             <Stack.Screen name="admin/index" />
